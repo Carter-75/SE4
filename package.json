@@ -5,7 +5,9 @@
     "dev": "node scripts/dev-launcher.js",
     "build": "cd frontend && npm install && npm run build",
     "postinstall": "npm install --prefix backend && npm install --prefix frontend",
-    "start": "node start-dev.js"
+    "start": "node start-dev.js",
+    "sync": "py sync-env.py || python3 sync-env.py || python sync-env.py",
+    "push-sync": "npm run sync && git push"
   },
   "dependencies": {
     "express": "^4.19.2",
