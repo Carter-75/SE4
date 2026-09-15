@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Appointment-Booker</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <script>
+    (function() {
+      console.log('🚀 [' + 'appointment-booker' + '] Client script active.');
+      if (window.parent !== window) {
+        console.log('🚀 [' + 'appointment-booker' + '] Embedded in iframe. Sending handshake...');
+        window.parent.postMessage({ type: 'CHECK_IN', project: 'appointment-booker' }, '*');
+      } else {
+        console.log('🚀 [' + 'appointment-booker' + '] Running standalone.');
+      }
+    })();
+  </script>
+  
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>

@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env.local
+.angular/
+.vscode/
+
+delete-project.py
