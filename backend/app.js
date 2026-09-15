@@ -24,6 +24,8 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const session = require('express-session');
+const connectMongo = require('connect-mongo');
+const MongoStore = connectMongo.default || connectMongo;
 const passport = require('passport');
 
 const app = express();
@@ -70,6 +72,7 @@ const connectDB = async () => {
   try {
     console.log('INFO: Connecting to MongoDB...');
     await mongoose.connect(mongoURI, {
+      dbName: process.env.PROJECT_NAME || 'appointment-booker',
       serverSelectionTimeoutMS: 5000,
       connectTimeoutMS: 10000
     });
@@ -134,9 +137,14 @@ app.use(
     secret: process.env.SESSION_SECRET || 'secret',
     resave: false,
     saveUninitialized: false,
+    store: mongoURI ? MongoStore.create({
+      mongoUrl: mongoURI,
+      dbName: process.env.PROJECT_NAME || 'appointment-booker',
+      touchAfter: 24 * 3600
+    }) : undefined,
     cookie: {
       secure: isProd,
-      sameSite: isProd ? 'none' : 'lax'
+      sameSite: isProd ? (process.env.PROD_BACKEND_URL === process.env.PROD_FRONTEND_URL ? 'lax' : 'none') : 'lax'
     }
   })
 );

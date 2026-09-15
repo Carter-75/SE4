@@ -6,20 +6,22 @@
     "dev": "nodemon ./bin/www"
   },
   "dependencies": {
-    "express": "^4.19.2",
-    "cors": "^2.8.5",
+    "bcryptjs": "^2.4.3",
+    "connect-mongo": "^6.0.0",
     "cookie-parser": "~1.4.6",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
-    "morgan": "~1.10.0",
-    "mongoose": "^8.0.0",
-    "helmet": "^7.1.0",
     "dotenv": "^16.4.5",
-    "openai": "^4.55.0",
-    "ws": "^8.18.0",
-    "zod": "^3.23.8",
+    "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "helmet": "^7.1.0",
+    "mongoose": "^8.0.0",
+    "morgan": "~1.10.0",
+    "openai": "^4.55.0",
     "passport": "^0.7.0",
-    "bcryptjs": "^2.4.3"
+    "passport-local": "^1.0.0",
+    "ws": "^8.18.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

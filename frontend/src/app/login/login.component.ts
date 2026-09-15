@@ -13,17 +13,6 @@ import { FormsModule } from '@angular/forms';
         <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
         
         <div class="space-y-4">
-          <button (click)="loginWithGoogle()" 
-                  class="w-full p-3 bg-white border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors">
-            <img src="https://www.google.com/favicon.ico" class="w-5 h-5 mr-2" alt="Google">
-            Sign in with Google
-          </button>
-          
-          <div class="relative flex items-center justify-center py-2">
-            <div class="border-t w-full"></div>
-            <span class="bg-white px-2 text-gray-500 text-sm absolute">or email</span>
-          </div>
-
           <input [(ngModel)]="email" type="email" placeholder="Email" class="w-full p-3 border rounded-lg">
           <input [(ngModel)]="password" type="password" placeholder="Password" class="w-full p-3 border rounded-lg">
           
@@ -47,9 +36,5 @@ export class LoginComponent {
       next: () => this.router.navigate(['/dashboard']),
       error: (err) => alert(err.error?.message || 'Login failed')
     });
-  }
-
-  loginWithGoogle() {
-    this.api.loginWithGoogle();
   }
 }

@@ -32,7 +32,9 @@ export class DashboardComponent implements OnInit {
   }
 
   logout() {
-    this.api.logout();
-    this.router.navigate(['/home']);
+    this.api.logout().subscribe({
+      next: () => this.router.navigate(['/home']),
+      error: () => this.router.navigate(['/home'])
+    });
   }
 }

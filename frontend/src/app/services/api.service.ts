@@ -11,7 +11,7 @@ export class ApiService {
 
   // Dynamic API URL mapping
   private get apiUrl(): string {
-    const isProd = ('__PRODUCTION__' as string) === 'true';
+    const isProd = ('false' as string) === 'true';
     if (isProd) {
       return '/api';
     }
@@ -47,8 +47,9 @@ export class ApiService {
     );
   }
 
-  logout(): void {
+  logout(): Observable<any> {
     localStorage.removeItem('auth_token');
     this.currentUser.set(null);
+    return this.http.get<any>(`${this.apiUrl}/auth/logout`);
   }
 }
