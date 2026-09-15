@@ -1,85 +1,11 @@
-===================================================================
-LOCAL DEVELOPMENT & TESTING GUIDE FOR THE TEAM
-===================================================================
+Hi read this and do whats needed if u wanna test local
 
-Hi team! Follow these simple steps to run and test the project locally.
+u have a .env.example and just cp .env.example .env.local 
+to rename it
 
--------------------------------------------------------------------
-WHY YOU DON'T HAVE .env.local IN GIT:
--------------------------------------------------------------------
-".env.local" contains secrets and environment variables, so it is 
-safely ignored by git (.gitignore). 
-Instead, we provide ".env.example" which has all the exact settings 
-pre-configured for you!
+then just npm install
 
--------------------------------------------------------------------
-STEP 1: INSTALL DEPENDENCIES
--------------------------------------------------------------------
-In the project root folder (Appointment-Booker), run:
+then npm run dev
 
-   npm install
+that it its setup for u with a script ive made a while ago
 
-(This automatically installs root, backend, and frontend dependencies).
-
-
--------------------------------------------------------------------
-STEP 2: CREATE YOUR .env.local FILE
--------------------------------------------------------------------
-You just need to copy ".env.example" to ".env.local".
-
-You can do this with one command in your terminal:
-
-• Windows PowerShell:
-   cp .env.example .env.local
-
-• Mac / Linux / Git Bash:
-   cp .env.example .env.local
-
-• Or manually in VS Code / File Explorer:
-   Right-click ".env.example", click Copy, Paste it, and rename it to ".env.local".
-
-What is inside .env.local:
-- MONGODB_URI: Pre-configured to our team's live MongoDB Atlas cloud database!
-  You DO NOT need to install MongoDB locally or run Docker.
-- PRODUCTION=false: Required for local testing so your browser accepts session cookies over HTTP.
-- SESSION_SECRET: Used for session cookies and authentication.
-
-
--------------------------------------------------------------------
-STEP 3: START THE DEV SERVERS
--------------------------------------------------------------------
-Run:
-
-   npm run dev
-
-This launcher will automatically:
-1. Start the Express backend on http://localhost:3000
-2. Start the Angular frontend on http://localhost:4200
-3. Set up the proxy so all frontend calls to /api route to the backend.
-
-
--------------------------------------------------------------------
-STEP 4: TEST IN YOUR BROWSER
--------------------------------------------------------------------
-1. Open: http://localhost:4200
-2. Check database connection & backend health:
-   http://localhost:4200/api/health
-   (Should return: "status": "online", "database": "Connected")
-3. Test Auth:
-   - Register a test account
-   - Log in
-   - Check the dashboard
-   - Refresh the page (session persists!)
-   - Click "Log Out" (session is cleared!)
-
-
--------------------------------------------------------------------
-GIT PUSH WORKFLOW FOR THE TEAM:
--------------------------------------------------------------------
-• Normal push:
-   git push
-   (Standard, fast git push. It will NOT run any Vercel sync scripts or block you.)
-
-• Push and sync with Vercel (optional):
-   npm run push-sync
-===================================================================
