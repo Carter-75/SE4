@@ -4,5 +4,7 @@ dist/
 .angular/
 .vscode/
 
-delete-project.py
 .vercel
+
+delete-project.py
+READ THIS TEAM.txt
