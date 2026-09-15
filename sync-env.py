@@ -12,6 +12,11 @@ def sync_vercel_env():
         print(">> No environment file found. Skipping sync.")
         return
 
+    if not Path('.vercel').exists():
+        print(">> Vercel Watcher: Project is not linked locally via 'vercel link'. Skipping CLI sync.")
+        print(">> (Your environment variables can be managed directly in the Vercel Project Settings web dashboard)")
+        return
+
     print(f">> Vercel Watcher: Syncing {env_path.name} to Production Vault...")
     
     try:

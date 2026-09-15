@@ -47,17 +47,6 @@ require('./config/passport')(passport);
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 
-// --- Diagnostic Routes ---
-app.get('/api/health', async (req, res) => {
-  const isConnected = mongoose.connection.readyState === 1;
-  res.json({
-    status: 'online',
-    database: isConnected ? 'Connected' : 'Disconnected',
-    env: isProd ? 'production' : 'development',
-    timestamp: new Date().toISOString()
-  });
-});
-
 // --- MongoDB Setup ---
 const mongoURI = process.env.MONGODB_URI;
 
@@ -84,6 +73,21 @@ const connectDB = async () => {
 
 // Initial connection
 connectDB();
+
+// --- Diagnostic Routes ---
+app.get('/api/health', async (req, res) => {
+  if (mongoose.connection.readyState !== 1) {
+    await connectDB();
+  }
+  const isConnected = mongoose.connection.readyState === 1;
+  res.json({
+    status: 'online',
+    database: isConnected ? 'Connected' : 'Disconnected',
+    env: isProd ? 'production' : 'development',
+    hasMongoUri: !!mongoURI,
+    timestamp: new Date().toISOString()
+  });
+});
 
 // --- Middlewares ---
 
