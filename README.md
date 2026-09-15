@@ -5,8 +5,6 @@ A full-stack MEAN application (MongoDB, Express, Angular, Node) generated with a
 ## Features
 - **Frontend**: Angular v21 (Standalone, Signals)
 - **Backend**: Node/Express with Graceful MongoDB
-- **Security**: Iframe protection for portfolio embedding
-- **Interactive**: Matter.js physics and Anime.js animations
 
 ## Development
 

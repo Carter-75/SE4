@@ -5,3 +5,4 @@ dist/
 .vscode/
 
 delete-project.py
+.vercel
