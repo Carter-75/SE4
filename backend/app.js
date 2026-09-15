@@ -1,8 +1,12 @@
 // --- Environment and Dependencies ---
 const path = require('path');
 const fs = require('fs');
-const dns = require('node:dns');
-dns.setServers(['8.8.8.8', '1.1.1.1']);
+if (!process.env.VERCEL) {
+  try {
+    const dns = require('node:dns');
+    dns.setServers(['8.8.8.8', '1.1.1.1']);
+  } catch (e) {}
+}
 
 const resolveEnvPath = () => {
   const candidates = [
@@ -49,25 +53,36 @@ const authRouter = require('./routes/auth');
 
 // --- MongoDB Setup ---
 const mongoURI = process.env.MONGODB_URI;
+let lastDbError = null;
+let dbConnectPromise = null;
 
 const connectDB = async () => {
-  if (mongoose.connection.readyState >= 1) return;
+  if (mongoose.connection.readyState === 1) return;
+  if (mongoose.connection.readyState === 2 && dbConnectPromise) {
+    return dbConnectPromise;
+  }
   
   if (!mongoURI) {
-    console.warn('WARN: No MONGODB_URI found in environment!');
+    lastDbError = 'No MONGODB_URI found in environment!';
+    console.warn('WARN: ' + lastDbError);
     return;
   }
 
   try {
     console.log('INFO: Connecting to MongoDB...');
-    await mongoose.connect(mongoURI, {
+    dbConnectPromise = mongoose.connect(mongoURI, {
       dbName: process.env.PROJECT_NAME || 'appointment-booker',
       serverSelectionTimeoutMS: 5000,
       connectTimeoutMS: 10000
     });
+    await dbConnectPromise;
     console.log('OK: Connected to MongoDB');
+    lastDbError = null;
   } catch (err) {
+    lastDbError = err.message;
     console.error('ERROR: MongoDB Connection Failed:', err.message);
+  } finally {
+    dbConnectPromise = null;
   }
 };
 
@@ -80,11 +95,14 @@ app.get('/api/health', async (req, res) => {
     await connectDB();
   }
   const isConnected = mongoose.connection.readyState === 1;
+  const states = ['Disconnected', 'Connected', 'Connecting', 'Disconnecting'];
   res.json({
     status: 'online',
-    database: isConnected ? 'Connected' : 'Disconnected',
+    database: states[mongoose.connection.readyState] || 'Unknown',
+    readyState: mongoose.connection.readyState,
     env: isProd ? 'production' : 'development',
     hasMongoUri: !!mongoURI,
+    dbError: lastDbError,
     timestamp: new Date().toISOString()
   });
 });
