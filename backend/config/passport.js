@@ -15,20 +15,35 @@ module.exports = function(passport) {
 
   // Local Strategy
   passport.use(
-    new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
+  new LocalStrategy(
+    { usernameField: 'username' },
+    async (username, password, done) => {
       try {
-        const user = await User.findOne({ email: email.toLowerCase() });
-        if (!user) return done(null, false, { message: 'Incorrect email or password.' });
+        const user = await User.findOne({
+          username: username.trim()
+        });
+
+        if (!user) {
+          return done(null, false, {
+            message: 'Incorrect username or password.'
+          });
+        }
 
         const isMatch = await user.comparePassword(password);
-        if (!isMatch) return done(null, false, { message: 'Incorrect email or password.' });
+
+        if (!isMatch) {
+          return done(null, false, {
+            message: 'Incorrect username or password.'
+          });
+        }
 
         return done(null, user);
-      } catch (err) {
-        return done(err);
+      } catch (error) {
+        return done(error);
       }
-    })
-  );
+    }
+  )
+);
 
   
 };

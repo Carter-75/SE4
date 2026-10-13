@@ -51,6 +51,251 @@
   </div>
 </main>
 
+<script>
+  const serviceInputs = document.querySelectorAll('input[name="service"]');
+  const monthInput = document.getElementById('booking-month');
+  const calendarContent = document.getElementById('calendar-content');
+  const calendarDays = document.getElementById('calendar-days');
+  const servicePrompt = document.getElementById('service-prompt');
+  const availabilityNote = document.getElementById('availability-note');
+  const selectedDateText = document.getElementById('selected-date');
+  const timeOptions = document.getElementById('time-options');
+  const bookingSummary = document.getElementById('booking-summary');
+  const bookButton = document.getElementById('book-appointment');
+  const bookingStatus = document.getElementById('booking-status');
+
+  let availableAppointments = [];
+  let selectedDate = null;
+  let selectedAppointment = null;
+
+  function localDateKey(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  function formatTime(value) {
+    return new Date(value).toLocaleTimeString([], {
+      hour: 'numeric',
+      minute: '2-digit'
+    });
+  }
+
+  function getSelectedService() {
+    return document.querySelector('input[name="service"]:checked')?.value
+      .toLowerCase();
+  }
+
+  function clearSelection() {
+    selectedDate = null;
+    selectedAppointment = null;
+    selectedDateText.textContent = 'Select an available day.';
+    timeOptions.replaceChildren();
+    bookingSummary.textContent = '';
+    bookButton.disabled = true;
+  }
+
+  async function loadAppointments() {
+    const service = getSelectedService();
+
+    calendarContent.hidden = false;
+    servicePrompt.textContent = '';
+    availabilityNote.textContent = 'Loading available appointments...';
+    calendarDays.replaceChildren();
+    clearSelection();
+
+    if (!service || !monthInput.value) return;
+
+    try {
+      const response = await fetch('/api/appointments/available', {
+        credentials: 'include'
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Could not load appointments.');
+      }
+
+      availableAppointments = data.filter(appointment =>
+        appointment.category === service &&
+        appointment.provider
+      );
+
+      renderCalendar();
+    } catch (error) {
+      availabilityNote.textContent = error.message;
+    }
+  }
+
+  function renderCalendar() {
+    calendarDays.replaceChildren();
+
+    const [year, month] = monthInput.value.split('-').map(Number);
+    const firstDay = new Date(year, month - 1, 1);
+    const daysInMonth = new Date(year, month, 0).getDate();
+
+    const appointmentsByDate = new Map();
+
+    for (const appointment of availableAppointments) {
+      const dateKey = localDateKey(new Date(appointment.startTime));
+
+      if (!dateKey.startsWith(monthInput.value)) continue;
+
+      if (!appointmentsByDate.has(dateKey)) {
+        appointmentsByDate.set(dateKey, []);
+      }
+
+      appointmentsByDate.get(dateKey).push(appointment);
+    }
+
+    for (let i = 0; i < firstDay.getDay(); i++) {
+      const emptyDay = document.createElement('span');
+      emptyDay.className = 'calendar-empty';
+      emptyDay.setAttribute('aria-hidden', 'true');
+      calendarDays.appendChild(emptyDay);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month - 1, day);
+      const dateKey = localDateKey(date);
+      const appointments = appointmentsByDate.get(dateKey) || [];
+      const button = document.createElement('button');
+
+      button.type = 'button';
+      button.textContent = day;
+      button.className = 'calendar-day';
+
+      if (appointments.length === 0) {
+        button.disabled = true;
+        button.classList.add('unavailable');
+        button.setAttribute('aria-label', `${dateKey}, unavailable`);
+      } else {
+        button.classList.add('available');
+        button.setAttribute(
+          'aria-label',
+          `${dateKey}, ${appointments.length} available appointments`
+        );
+
+        button.addEventListener('click', () => {
+          document.querySelectorAll('.calendar-day.selected')
+            .forEach(element => element.classList.remove('selected'));
+
+          button.classList.add('selected');
+          showAppointmentsForDate(dateKey, appointments);
+        });
+      }
+
+      calendarDays.appendChild(button);
+    }
+
+    availabilityNote.textContent =
+      'Choose a highlighted day to view available providers and times.';
+  }
+
+  function showAppointmentsForDate(dateKey, appointments) {
+    selectedDate = dateKey;
+    selectedAppointment = null;
+    timeOptions.replaceChildren();
+    bookingSummary.textContent = '';
+    bookButton.disabled = true;
+
+    selectedDateText.textContent = new Date(
+      `${dateKey}T12:00:00`
+    ).toLocaleDateString(undefined, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    for (const appointment of appointments) {
+      const label = document.createElement('label');
+      label.className = 'appointment-option';
+
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'selectedAppointment';
+      radio.value = appointment._id;
+
+      const details = document.createElement('span');
+      const provider = appointment.provider;
+      const providerName =
+        `${provider.firstName || ''} ${provider.lastName || ''}`.trim() ||
+        provider.username ||
+        'Provider';
+
+      details.textContent =
+        `${providerName} — ${appointment.title} — ` +
+        `${formatTime(appointment.startTime)}–${formatTime(appointment.endTime)}`;
+
+      radio.addEventListener('change', () => {
+        selectedAppointment = appointment;
+        bookingSummary.textContent =
+          `Selected: ${appointment.title} with ${providerName}.`;
+        bookButton.disabled = false;
+      });
+
+      label.append(radio, details);
+      timeOptions.appendChild(label);
+    }
+  }
+
+  serviceInputs.forEach(input => {
+    input.addEventListener('change', () => {
+      bookingStatus.textContent = '';
+      loadAppointments();
+    });
+  });
+
+  monthInput.addEventListener('change', () => {
+    bookingStatus.textContent = '';
+    loadAppointments();
+  });
+
+  bookButton.addEventListener('click', async () => {
+    if (!selectedAppointment) return;
+
+    bookButton.disabled = true;
+    bookingStatus.textContent = 'Booking your appointment...';
+
+    try {
+      const response = await fetch(
+        `/api/appointments/${encodeURIComponent(selectedAppointment._id)}/book`,
+        {
+          method: 'POST',
+          credentials: 'include'
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          result.message || 'Could not book this appointment.'
+        );
+      }
+
+      bookingStatus.textContent = 'Your appointment has been booked successfully!';
+      await loadAppointments();
+    } catch (error) {
+      bookingStatus.textContent = error.message;
+      await loadAppointments();
+    }
+  });
+
+  // Default the calendar to the current month.
+  const now = new Date();
+  monthInput.value =
+    `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+  // The calendar stays hidden until a service is selected.
+  calendarContent.hidden = true;
+</script>
+</body>
+</html>
+
 </body></html>
 
 

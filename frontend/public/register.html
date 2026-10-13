@@ -56,25 +56,41 @@
 <script>
   const registerForm = document.getElementById('register-form');
   const registerStatus = document.getElementById('register-status');
-  const roleSelect = registerForm.querySelector('[name="role"]');
-
-  const serviceTypeField = registerForm.querySelector('[name="serviceType"]');
-  const qualificationsField = registerForm.querySelector('[name="qualifications"]');
 
   // Show provider-specific fields only when provider is selected.
-  function updateProviderFields() {
-    const isProvider = roleSelect.value === 'provider';
+  
+const roleSelect = document.querySelector('select[name="role"]');
+const providerFields = document.getElementById('provider-fields');
 
-    if (serviceTypeField) {
-      serviceTypeField.required = isProvider;
-      serviceTypeField.closest('.form-group')?.toggleAttribute('hidden', !isProvider);
-    }
+const serviceTypeField = document.querySelector(
+  'select[name="serviceType"]'
+);
 
-    if (qualificationsField) {
-      qualificationsField.required = isProvider;
-      qualificationsField.closest('.form-group')?.toggleAttribute('hidden', !isProvider);
-    }
-  }
+const qualificationsField = document.querySelector(
+  'textarea[name="qualifications"]'
+);
+
+function updateProviderFields() {
+  const isProvider = roleSelect.value === 'provider';
+
+  // Show or hide the entire provider section.
+  providerFields.hidden = !isProvider;
+
+  // Require provider details only for service providers.
+  serviceTypeField.required = isProvider;
+  qualificationsField.required = isProvider;
+
+  // Prevent hidden provider fields from being submitted for other roles.
+  serviceTypeField.disabled = !isProvider;
+  qualificationsField.disabled = !isProvider;
+}
+
+// Update fields when the account type changes.
+roleSelect.addEventListener('change', updateProviderFields);
+
+// Set the correct initial state when the page loads.
+updateProviderFields();
+
 
   roleSelect.addEventListener('change', updateProviderFields);
   updateProviderFields();

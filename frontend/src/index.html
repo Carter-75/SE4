@@ -54,8 +54,8 @@
         },
         credentials: 'include',
         body: JSON.stringify({
-          email: email,
-          password: password
+           username: document.getElementById('username').value.trim(),
+           password: document.getElementById('password').value
         })
       });
 

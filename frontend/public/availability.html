@@ -108,6 +108,49 @@
   </form>
 </main>
 
+<script>
+  const slotForm = document.getElementById('slot-form');
+  const slotStatus = document.getElementById('slot-status');
+
+  slotForm.addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    slotStatus.textContent = 'Creating appointment slot...';
+
+    const formData = new FormData(slotForm);
+
+    const slotData = {
+      serviceType: formData.get('serviceType'),
+      appointmentTitle: formData.get('appointmentTitle'),
+      date: formData.get('date'),
+      startTime: formData.get('startTime'),
+      endTime: formData.get('endTime')
+    };
+
+    try {
+      const response = await fetch('/api/appointments/slots', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(slotData)
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Could not create appointment slot.');
+      }
+
+      slotStatus.textContent = 'Appointment slot created successfully!';
+      slotForm.reset();
+    } catch (error) {
+      slotStatus.textContent = error.message;
+    }
+  });
+</script>
+
 </body>
 </html>
 

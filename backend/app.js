@@ -186,6 +186,8 @@ app.use('/', indexRouter);
 app.use('/api/auth', authRouter);
 app.use('/auth', authRouter);
 
+app.use('/api/appointments', require('./routes/appointments'));
+
 // Error handler
 app.use((err, req, res, next) => {
   res.status(err.status || 500).json({

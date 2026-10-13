@@ -9,7 +9,8 @@ const appointmentSchema = new mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User' // Reference to the User model
+    ref: 'User', // Reference to the User model
+    default:null
   },
   provider: {
     type: mongoose.Schema.Types.ObjectId,
@@ -31,7 +32,12 @@ const appointmentSchema = new mongoose.Schema({
   },
   description: {
     type: String
+  },
+
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
 });
 
-module.exports = mongoose.model('Appointment', appointmentSchema);
+module.exports = mongoose.model('Appointment', appointmentSchema,'appointment');
