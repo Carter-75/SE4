@@ -1,11 +1,264 @@
-/* Global Styles */
-* {
+/* Match the original Figma bars while providing native form controls. */
+.login-input,
+.login-button {
+  position: absolute;
   box-sizing: border-box;
-  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: rgb(217, 217, 217);
+  color: black;
+  font-family: Inter, serif;
+  font-weight: 400;
+  font-size: 36px;
+}
+.login-input {
+  width: 619px;
+  height: 71px;
+  left: 50px;
   padding: 0;
 }
-
-body {
-  
+.login-input::placeholder {
+  color: black;
+  opacity: 1;
+}
+.username { top: 272px; padding-left: 7px; }
+.password { top: 488px; }
+.login-button {
+  top: 646px;
+  left: 60px;
+  width: 160px;
+  height: 72px;
+  padding: 10px 0 0 40px;
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+}
+.login-input:focus-visible,
+.login-button:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+#login-status {
+  position: absolute;
+  top: 735px;
+  left: 60px;
+  margin: 0;
+  font-family: Inter, serif;
+  font-size: 20px;
+}
+.register-link { text-decoration: none; cursor: pointer; }
+.customer-action {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.customer-action:focus-visible { outline: 3px solid #2563eb; outline-offset: 4px; }
+#customer-dialog { max-width: 440px; font-family: Inter, serif; }
+#customer-dialog::backdrop { background: rgb(0 0 0 / 35%); }
+.schedule-page {
+  width: 1440px;
+  min-height: 1024px;
+  box-sizing: border-box;
+  background: rgb(109, 205, 124);
+  padding: 42px 116px 64px;
+  color: black;
+  font-family: Inter, serif;
+}
+.schedule-page h1 { font-size: 64px; font-weight: 400; text-align: center; margin: 0 0 80px; }
+.schedule-page fieldset { border: 0; padding: 0; margin: 0; max-width: 1000px; }
+.schedule-page legend { font-size: 40px; padding: 0; }
+.schedule-help { font-size: 20px; margin: 12px 0 24px; }
+.schedule-head, .schedule-row { display: grid; grid-template-columns: 360px 280px 280px; gap: 24px; align-items: center; }
+.schedule-head { font-size: 28px; margin-bottom: 12px; }
+.schedule-row { margin-bottom: 16px; font-size: 32px; }
+.day-label { display: flex; align-items: center; gap: 14px; cursor: pointer; }
+.day-label input { width: 26px; height: 26px; accent-color: #185d29; }
+.schedule-row input[type="time"] {
+  width: 100%; box-sizing: border-box; height: 60px; padding: 8px 14px;
+  border: 0; border-radius: 0; background: #d9d9d9; font: 28px Inter, serif;
+}
+.schedule-row input:disabled { opacity: .45; }
+.schedule-actions { display: flex; align-items: center; gap: 32px; margin-top: 32px; }
+.schedule-actions button { padding: 16px 24px; border: 0; background: #d9d9d9; font: 32px Inter, serif; cursor: pointer; }
+.schedule-actions a { color: black; font-size: 24px; }
+#schedule-status { font-size: 24px; margin: 12px 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.schedule-page input:focus-visible, .schedule-page button:focus-visible, .schedule-page a:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+.booking-page { width:1440px; min-height:1024px; box-sizing:border-box; background:rgb(136,196,252); padding:42px 64px; font-family:Inter,serif; }
+.booking-page h1 { text-align:center; font-size:64px; font-weight:400; margin:0 0 72px; }
+.booking-layout { display:grid; grid-template-columns:900px 350px; gap:35px; }
+.booking-calendar { padding-right:20px; }
+.month-label { display:flex; justify-content:center; align-items:center; gap:20px; font-size:40px; }
+.month-label input { font:28px Inter,serif; background:#d9d9d9; border:0; padding:10px; }
+.calendar-week,.calendar-days { display:grid; grid-template-columns:repeat(7,80px); justify-content:space-between; gap:24px 0; }
+.calendar-week { margin:28px 0 16px; font-size:28px; text-align:center; }
+.calendar-days button { width:80px; height:80px; border:0; background:rgb(66,133,204); color:black; font:32px Inter,serif; cursor:pointer; }
+.calendar-days button:disabled { background:#d9d9d9; color:#555; cursor:default; }
+.booking-options { border-left:1px solid black; padding-left:30px; }
+.service-options { border:0; padding:0; display:flex; justify-content:space-between; gap:12px; }
+.service-options legend { font-size:24px; margin-bottom:16px; }
+.service-options label { display:flex; flex-direction:column; align-items:center; gap:8px; font-size:20px; cursor:pointer; }
+.service-icon { display:grid; place-items:center; width:71px; height:71px; border-radius:50%; background:rgb(66,133,204); font-size:42px; }
+.service-icon img { width:100%; height:100%; object-fit:cover; border-radius:inherit; }
+.service-icon svg { width:52px; height:52px; }
+.service-options input:checked + .service-icon { outline:3px solid #153b60; outline-offset:3px; }
+.booking-options h2 { font-size:40px; font-weight:400; margin-top:70px; }
+.time-options { display:flex; flex-wrap:wrap; gap:12px; max-height:300px; overflow:auto; padding:4px; }
+.time-options button,#book-appointment { background:#d9d9d9; border:0; padding:12px 18px; font:24px Inter,serif; cursor:pointer; }
+#book-appointment { margin-top:18px; }
+#book-appointment:disabled { opacity:.5; cursor:default; }
+.booking-page [aria-pressed="true"] { outline:3px solid #153b60; outline-offset:2px; }
+.booking-page :focus-visible { outline:3px solid #153b60; outline-offset:3px; }
+.booking-page p,.booking-page a { font-size:20px; color:black; }
+.registration-details { position:absolute; top:148px; left:824px; width:551px; min-height:679px; box-sizing:border-box; background:#d9d9d9; padding:28px; font-family:Inter,serif; }
+.registration-details h2 { font-size:36px; font-weight:400; margin:0 0 24px; }
+.registration-details h3 { font-size:26px; font-weight:400; }
+.registration-details label { display:block; font-size:24px; margin-bottom:24px; }
+.registration-details select,.registration-details textarea { display:block; box-sizing:border-box; width:100%; margin-top:8px; padding:12px; font:22px Inter,serif; border:1px solid #555; background:white; }
+.registration-details p { font-size:20px; }
+.slot-creation { border:1px solid #285f34; padding:24px; margin-bottom:40px; }
+.slot-creation h2 { font-size:36px; font-weight:400; margin:0 0 16px; }
+.slot-creation p,.slot-creation details { font-size:20px; }
+.requirements-form { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+.requirements-form label { display:flex; flex-direction:column; gap:8px; font-size:24px; }
+.requirements-form input,.requirements-form select { min-width:0; padding:12px; font:22px Inter,serif; background:#d9d9d9; border:1px solid #555; }
+.requirements-form button { font:22px Inter,serif; padding:12px; }
+.demo-slot { display:block; background:#d9d9d9; padding:20px; margin:16px 0; font-size:22px; }
+.demo-slot strong,.demo-slot span { display:block; margin:8px 0; }
+.demo-slot input { width:22px; height:22px; }
+.register-link:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+.register-input,
+.register-button {
+  position: absolute;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 0;
+  background: rgb(217, 217, 217);
+  color: black;
+  font-family: Inter, serif;
+  font-weight: 400;
+  font-size: 36px;
+}
+.register-input {
+  left: 57px;
+  width: 619px;
+  height: 71px;
+  padding: 0 7px;
+}
+.register-input::placeholder { color: black; opacity: 1; }
+.register-button {
+  top: 824px;
+  left: 57px;
+  width: 238px;
+  height: 72px;
+  padding: 11px 0 0 40px;
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+}
+.register-input:focus-visible,
+.register-button:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+#register-status {
+  position: absolute;
+  top: 916px;
+  left: 57px;
+  margin: 0;
+  font-family: Inter, serif;
+  font-size: 20px;
 }
 
+/* Responsive page layouts replace fixed Figma canvas positioning. */
+html { box-sizing:border-box; }
+*,*::before,*::after { box-sizing:inherit; }
+body { margin:0; }
+[hidden] { display:none !important; }
+.auth-page {
+  width:100% !important; height:auto !important; min-height:100vh;
+  display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);
+  gap:32px; padding:clamp(24px,5vw,72px) !important;
+}
+.auth-heading { grid-column:1/-1; margin:0; text-align:center; font:400 clamp(36px,5vw,64px) Inter,serif; }
+#login-form,#register-form { display:flex; flex-direction:column; gap:28px; justify-content:center; min-width:0; }
+.login-input,.register-input,.login-button,.register-button,#login-status,#register-status,.register-link {
+  position:static !important; min-width:0 !important; min-height:0 !important;
+}
+.login-input,.register-input { width:100%; height:64px; padding:10px 14px; font-size:clamp(22px,3vw,36px); }
+.login-button,.register-button { width:fit-content; height:auto; padding:14px 28px; font-size:28px; }
+#login-status,#register-status { font-size:20px; overflow-wrap:anywhere; }
+.register-link { grid-column:1; font-size:clamp(22px,3vw,36px) !important; }
+.auth-art { grid-column:2; grid-row:2/4; background:#d9d9d9; min-height:420px; }
+.registration-details { position:static; width:100%; min-height:0; padding:24px; grid-column:2; grid-row:2; }
+.home-page { width:100%; height:auto !important; min-height:100vh; padding:clamp(24px,5vw,72px) !important; }
+.home-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:48px 24px; max-width:1320px; margin:auto; }
+.home-card { display:flex; flex-direction:column; align-items:center; gap:18px; padding:0; border:0; background:transparent; cursor:pointer; font:400 clamp(22px,2.5vw,32px) Inter,serif; }
+.home-card img { position:static !important; width:min(100%,302px) !important; height:auto !important; aspect-ratio:1; border-radius:50% !important; }
+.home-card:focus-visible { outline:3px solid #2563eb; outline-offset:6px; }
+.schedule-page,.booking-page { width:100%; min-height:100vh; padding:clamp(20px,4vw,64px); }
+.schedule-page h1,.booking-page h1 { font-size:clamp(36px,5vw,64px); margin-bottom:40px; }
+.schedule-head,.schedule-row { grid-template-columns:minmax(120px,1.2fr) repeat(2,minmax(0,1fr)); gap:16px; }
+.schedule-row { font-size:clamp(20px,3vw,32px); }
+.schedule-row input[type="time"] { font-size:clamp(16px,2vw,28px); padding:8px; min-width:0; }
+.booking-layout { grid-template-columns:minmax(0,2fr) minmax(280px,1fr); gap:24px; }
+.booking-calendar { min-width:0; padding:0; }
+.calendar-week,.calendar-days { grid-template-columns:repeat(7,minmax(0,1fr)); gap:12px; }
+.calendar-week { font-size:clamp(14px,2vw,28px); }
+.calendar-days button { width:100%; height:auto; aspect-ratio:1; font-size:clamp(18px,2.5vw,32px); }
+.month-label { flex-wrap:wrap; font-size:32px; }
+.month-label input { min-width:0; max-width:100%; }
+.booking-options { min-width:0; padding-left:24px; }
+.service-options { min-width:0; flex-wrap:wrap; }
+.time-options button { max-width:100%; overflow-wrap:anywhere; }
+.schedule-actions { flex-wrap:wrap; }
+@media (max-width:900px) {
+  .booking-layout { grid-template-columns:1fr; }
+  .booking-options { grid-row:1; border-left:0; border-bottom:1px solid black; padding:0 0 24px; }
+  .booking-options h2 { margin-top:24px; }
+  .service-options { justify-content:flex-start; gap:32px; }
+  .requirements-form { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .home-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:600px) {
+  .auth-page { grid-template-columns:1fr; gap:24px; }
+  .registration-details { grid-column:1; grid-row:auto; }
+  .auth-art { display:none; }
+  .requirements-form { grid-template-columns:1fr; }
+  .schedule-page legend { font-size:28px; }
+  .schedule-head,.schedule-row { gap:8px; grid-template-columns:minmax(105px,1fr) repeat(2,minmax(0,1fr)); }
+  .day-label { gap:6px; font-size:18px; }
+  .day-label input { width:20px; height:20px; flex-shrink:0; }
+  .schedule-head { font-size:20px; }
+  .calendar-week,.calendar-days { gap:6px; }
+  .home-grid { gap:32px 16px; }
+  .home-card { font-size:20px; }
+}
+.auth-heading { grid-row: 1; }
+
+/* Keep headings and forms in explicit grid cells so markup order cannot move them. */
+.auth-heading { grid-column: 1 / -1; grid-row: 1; }
+#login-form, #register-form { grid-column: 1; grid-row: 2; align-self: start; }
+.register-link { grid-column: 1; grid-row: 3; }
+.auth-page { align-content: start; grid-auto-rows: auto; }
+.auth-art { grid-column: 2; grid-row: 2 / 4; }
+.registration-details { grid-column: 2; grid-row: 2; }
+.home-card { text-decoration: none; color: black; min-width: 0; }
+.home-card span { overflow-wrap: anywhere; text-align: center; }
+@media (max-width: 600px) {
+  .registration-details { grid-column: 1; grid-row: 3; }
+  .auth-art { display: none; }
+  .auth-page { padding: 24px !important; }
+}
+
+/* Keep headings and forms in explicit grid cells so markup order cannot move them. */
+.auth-heading { grid-column: 1 / -1; grid-row: 1; }
+#login-form, #register-form { grid-column: 1; grid-row: 2; align-self: start; }
+.register-link { grid-column: 1; grid-row: 3; }
+.auth-page { align-content: start; grid-auto-rows: auto; }
+.auth-art { grid-column: 2; grid-row: 2 / 4; }
+.registration-details { grid-column: 2; grid-row: 2; }
+.home-card { text-decoration: none; color: black; min-width: 0; }
+.home-card span { overflow-wrap: anywhere; text-align: center; }
+@media (max-width: 600px) {
+  .registration-details { grid-column: 1; grid-row: 3; }
+  .auth-art { display: none; }
+  .auth-page { padding: 24px !important; }
+}

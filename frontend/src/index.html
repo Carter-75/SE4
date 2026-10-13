@@ -1,27 +1,34 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
+<!-- Page metadata and the shared responsive stylesheet. -->
+
   <meta charset="utf-8">
-  <title>Appointment-Booker</title>
-  <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <script>
-    (function() {
-      console.log('🚀 [' + 'appointment-booker' + '] Client script active.');
-      if (window.parent !== window) {
-        console.log('🚀 [' + 'appointment-booker' + '] Embedded in iframe. Sending handshake...');
-        window.parent.postMessage({ type: 'CHECK_IN', project: 'appointment-booker' }, '*');
-      } else {
-        console.log('🚀 [' + 'appointment-booker' + '] Running standalone.');
-      }
-    })();
-  </script>
-  
+  <title>Login</title>
+  <link rel="stylesheet" href="styles.css">
+<!-- Add your JavaScript files here or before the closing body tag. Refresh-to-login behavior must also be implemented there. -->
 </head>
 <body>
-  <app-root></app-root>
+<!-- HTML/CSS handoff: add JavaScript for authentication, data loading, validation, and saving. -->
+
+<!-- Main page layout; styles.css adapts it to the browser width. -->
+<div class="auth-page" style="width: 1440px; height: 1024.00px; background-color: rgba(255, 255, 255, 1.00); padding: 0px 0px 0px 0px; position: relative">
+   <form method="post" id="login-form" aria-label="Login">
+     <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
+<input class="login-input username" type="text" id="username" name="username" aria-label="Username" placeholder="username..." autocomplete="username" required>
+     <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
+<input class="login-input password" type="password" id="password" name="password" aria-label="Password" placeholder="password" autocomplete="current-password" required>
+     <!-- CLICK: Authenticate username/password; route returned customer role to customer.html, provider to provider.html. Admin page is not supplied yet. -->
+<button class="login-button" type="submit">Login</button>
+     <!-- Display success or error messages here; remove hidden when a message is available. -->
+<p id="login-status" role="status" hidden></p>
+   </form>
+   <!-- Navigation link: opens register.html. -->
+<a class="register-link" href="register.html" style="width: auto; min-width: fit-content; min-height: 92.00px; color: rgba(0, 0, 0, 1.00); font-family: Inter; font-weight: 400; padding: 0px 0px 0px 0px; position: absolute; top: 633px; left: 320px; text-align: left; font-size: 36px"> New user? Register...</a>
+   <div class="auth-art" aria-hidden="true"></div>
+   <h1 class="auth-heading">Who are you?</h1>
+</div>
+
 </body>
 </html>
