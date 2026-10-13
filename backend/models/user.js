@@ -4,6 +4,31 @@ const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   // Fields used by the application
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  type: {
+    type: String,
+    enum: ['customer', 'provider', 'admin'],
+    default: 'customer',
+    required: true
+  },
+  firstN: {
+    type: String,
+    required: true
+  },
+  lastN: {
+    type: String,
+      required: true
+  },
+  dob: {
+    type: Date,
+    default: () => new Date('2000-01-01'),
+    required: true
+  },
   email: {
     type: String,
     required: true,
@@ -13,41 +38,6 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: function () {
-      return !this.googleId;
-    }
-  },
-  googleId: { type: String },
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-
-  // Fields required by MongoDB Atlas
-  username: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  type: {
-    type: String,
-    enum: ['customer', 'provider', 'admin'],
-    default: 'customer',
-    required: true
-  },
-  serviceType: {
-  type: String,
-  trim: true,
-  default: ''
-},
-qualifications: {
-  type: String,
-  trim: true,
-  default: ''
-},
-  firstN: { type: String, required: true },
-  lastN: { type: String, required: true },
-  dob: {
-    type: Date,
-    default: () => new Date('2000-01-01'),
     required: true
   },
   active: {
@@ -63,6 +53,11 @@ qualifications: {
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  qualifications: {
+    type: String,
+    trim: true,
+    default: ''
   }
 });
 
