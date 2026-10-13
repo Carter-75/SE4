@@ -30,5 +30,63 @@
    <h1 class="auth-heading">Who are you?</h1>
 </div>
 
+<script>
+  const loginForm = document.getElementById('login-form');
+  const loginStatus = document.getElementById('login-status');
+  const loginButton = loginForm.querySelector('button[type="submit"]');
+
+  loginForm.addEventListener('submit', async (event) => {
+    // Stop the browser from reloading the page when the form is submitted.
+    event.preventDefault();
+
+    const email = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    loginStatus.hidden = false;
+    loginStatus.textContent = 'Logging in...';
+    loginButton.disabled = true;
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Login failed. Please try again.');
+      }
+
+      loginStatus.textContent = 'Login successful! Redirecting...';
+
+      // Redirect according to the account type returned by the backend.
+      if (result.type === 'customer') {
+        window.location.href = 'customer.html';
+      } else if (result.type === 'provider') {
+        window.location.href = 'provider.html';
+      } else if (result.type === 'admin') {
+        loginStatus.textContent =
+          'Login successful, but the admin page has not been created yet.';
+      } else {
+        loginStatus.textContent =
+          'Login successful, but this account type is not recognized.';
+      }
+    } catch (error) {
+      loginStatus.textContent =
+        error.message || 'Unable to connect to the server. Please try again.';
+    } finally {
+      loginButton.disabled = false;
+    }
+  });
+</script>
+
 </body>
 </html>

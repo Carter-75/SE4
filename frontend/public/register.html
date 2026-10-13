@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Page metadata and the shared responsive stylesheet. -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register — Figma preview</title>
+  <link rel="stylesheet" href="styles.css">
+<!-- Add your JavaScript files here or before the closing body tag. Refresh-to-login behavior must also be implemented there. -->
+</head>
+<body>
+<!-- HTML/CSS handoff: add JavaScript for authentication, data loading, validation, and saving. -->
+
+<!-- Main page layout; styles.css adapts it to the browser width. -->
+<div class="auth-page" style="width: 1440px; height: 1024px; background-color: white; padding: 0; position: relative">
+  <form method="post" id="register-form" aria-label="Register an account">
+    <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
+<input class="register-input" style="top: 148px" id="first-name" name="firstName" aria-label="First name" placeholder="first name..." type="text" autocomplete="given-name" required>
+    <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
+<input class="register-input" style="top: 259px" id="last-name" name="lastName" aria-label="Last name" placeholder="last name..." type="text" autocomplete="family-name" required>
+    <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
+<input class="register-input" style="top: 370px" id="email" name="email" aria-label="Email" placeholder="email..." type="email" autocomplete="email" required>
+    <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
+<input class="register-input" style="top: 489px" id="register-username" name="username" aria-label="Username" placeholder="username..." type="text" autocomplete="username" required>
+    <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
+<input class="register-input" style="top: 599px" id="register-password" name="password" aria-label="Password" placeholder="password..." type="password" autocomplete="new-password" required>
+    <!-- CLICK: Validate fields and create account; after success return to index.html for login. -->
+<button class="register-button" type="submit">Register!</button>
+    <!-- Display success or error messages here; remove hidden when a message is available. -->
+<p id="register-status" role="status" hidden></p>
+  </form>
+  <h1 class="auth-heading">Welcome!</h1>
+  <section class="registration-details" aria-label="Account details">
+    <h2>Account details</h2>
+    <label>Account type
+      <!-- Dropdown: read the selected value when handling this form. -->
+<select name="role" form="register-form" required><option value="customer">Customer</option><option value="provider">Service provider</option><option value="admin">Admin</option></select>
+    </label>
+    <!-- On role change: show/enable/require these fields ONLY for provider; hide/disable for customer and admin. -->
+<div id="provider-fields" hidden>
+    <h3>For service providers</h3>
+    <label>Service type
+      <!-- Dropdown: read the selected value when handling this form. -->
+<select name="serviceType" form="register-form"><option value="">Choose a service</option><option>Beauty</option><option>Medical</option><option>Fitness</option></select>
+    </label>
+    <label>Qualifications
+      <!-- Multiline field for the provider qualifications. -->
+<textarea name="qualifications" form="register-form" rows="5" placeholder="Degree or certification, institution, and year"></textarea>
+    </label>
+    </div>
+  </section>
+</div>
+
+
+<script>
+  const registerForm = document.getElementById('register-form');
+  const registerStatus = document.getElementById('register-status');
+  const roleSelect = registerForm.querySelector('[name="role"]');
+
+  const serviceTypeField = registerForm.querySelector('[name="serviceType"]');
+  const qualificationsField = registerForm.querySelector('[name="qualifications"]');
+
+  // Show provider-specific fields only when provider is selected.
+  function updateProviderFields() {
+    const isProvider = roleSelect.value === 'provider';
+
+    if (serviceTypeField) {
+      serviceTypeField.required = isProvider;
+      serviceTypeField.closest('.form-group')?.toggleAttribute('hidden', !isProvider);
+    }
+
+    if (qualificationsField) {
+      qualificationsField.required = isProvider;
+      qualificationsField.closest('.form-group')?.toggleAttribute('hidden', !isProvider);
+    }
+  }
+
+  roleSelect.addEventListener('change', updateProviderFields);
+  updateProviderFields();
+
+  registerForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const firstName = document.getElementById('first-name').value.trim();
+    const lastName = document.getElementById('last-name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const username = document.getElementById('register-username').value.trim();
+    const password = document.getElementById('register-password').value;
+    const type = roleSelect.value;
+
+    const serviceType = serviceTypeField?.value.trim() || '';
+    const qualifications = qualificationsField?.value.trim() || '';
+
+    registerStatus.hidden = false;
+    registerStatus.textContent = 'Creating your account...';
+
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          username,
+          password,
+          type,
+          serviceType,
+          qualifications
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Registration failed.');
+      }
+
+      registerStatus.textContent =
+        `Registration successful! Welcome, ${result.firstName}.`;
+
+      // Redirect according to the account type.
+      if (result.type === 'customer') {
+        window.location.href = 'customer.html';
+      } else if (result.type === 'provider') {
+        window.location.href = 'provider.html';
+      }
+    } catch (error) {
+      registerStatus.textContent =
+        error.message || 'Unable to connect to the server.';
+    }
+  });
+</script>
+
+</body>
+</html>
+

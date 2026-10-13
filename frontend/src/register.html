@@ -52,6 +52,70 @@
   </section>
 </div>
 
+<script>
+  const form = document.getElementById('register-form');
+  const status = document.getElementById('register-status');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    status.hidden = false;
+    status.textContent = 'Creating your account...';
+
+    const firstName = document.getElementById('first-name').value.trim();
+    const lastName = document.getElementById('last-name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const username = document.getElementById('register-username').value.trim();
+    const password = document.getElementById('register-password').value;
+    const role = form.elements.namedItem('role').value;
+
+    if (!firstName || !lastName || !email || !username || !password) {
+      status.textContent = 'Please complete all required fields.';
+      return;
+    }
+
+    // Public registration currently supports customers only.
+    if (role !== 'customer') {
+      status.textContent =
+        'Currently, only customer registration is supported.';
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          result.message || 'Registration failed.'
+        );
+      }
+
+      status.textContent =
+        `Registration successful! Welcome, ${result.firstName}.`;
+
+      // Keep the form visible while testing.
+      console.log('Registration response:', result);
+      form.reset();
+    } catch (error) {
+      status.textContent = error.message ||
+        'Unable to connect to the registration server.';
+    }
+  });
+</script>
 </body>
 </html>
 
