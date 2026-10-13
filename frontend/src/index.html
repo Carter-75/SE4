@@ -1,92 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-<!-- Page metadata and the shared responsive stylesheet. -->
-
   <meta charset="utf-8">
+  <title>Appointment Booker</title>
+  <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login</title>
-  <link rel="stylesheet" href="styles.css">
-<!-- Add your JavaScript files here or before the closing body tag. Refresh-to-login behavior must also be implemented there. -->
 </head>
 <body>
-<!-- HTML/CSS handoff: add JavaScript for authentication, data loading, validation, and saving. -->
-
-<!-- Main page layout; styles.css adapts it to the browser width. -->
-<div class="auth-page" style="width: 1440px; height: 1024.00px; background-color: rgba(255, 255, 255, 1.00); padding: 0px 0px 0px 0px; position: relative">
-   <form method="post" id="login-form" aria-label="Login">
-     <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input class="login-input username" type="text" id="username" name="username" aria-label="Username" placeholder="username..." autocomplete="username" required>
-     <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input class="login-input password" type="password" id="password" name="password" aria-label="Password" placeholder="password" autocomplete="current-password" required>
-     <!-- CLICK: Authenticate username/password; route returned customer role to customer.html, provider to provider.html. Admin page is not supplied yet. -->
-<button class="login-button" type="submit">Login</button>
-     <!-- Display success or error messages here; remove hidden when a message is available. -->
-<p id="login-status" role="status" hidden></p>
-   </form>
-   <!-- Navigation link: opens register.html. -->
-<a class="register-link" href="register.html" style="width: auto; min-width: fit-content; min-height: 92.00px; color: rgba(0, 0, 0, 1.00); font-family: Inter; font-weight: 400; padding: 0px 0px 0px 0px; position: absolute; top: 633px; left: 320px; text-align: left; font-size: 36px"> New user? Register...</a>
-   <div class="auth-art" aria-hidden="true"></div>
-   <h1 class="auth-heading">Who are you?</h1>
-</div>
-
-<script>
-  const loginForm = document.getElementById('login-form');
-  const loginStatus = document.getElementById('login-status');
-  const loginButton = loginForm.querySelector('button[type="submit"]');
-
-  loginForm.addEventListener('submit', async (event) => {
-    // Stop the browser from reloading the page when the form is submitted.
-    event.preventDefault();
-
-    const email = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
-
-    loginStatus.hidden = false;
-    loginStatus.textContent = 'Logging in...';
-    loginButton.disabled = true;
-
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || 'Login failed. Please try again.');
-      }
-
-      loginStatus.textContent = 'Login successful! Redirecting...';
-
-      // Redirect according to the account type returned by the backend.
-      if (result.type === 'customer') {
-        window.location.href = 'customer.html';
-      } else if (result.type === 'provider') {
-        window.location.href = 'provider.html';
-      } else if (result.type === 'admin') {
-        loginStatus.textContent =
-          'Login successful, but the admin page has not been created yet.';
-      } else {
-        loginStatus.textContent =
-          'Login successful, but this account type is not recognized.';
-      }
-    } catch (error) {
-      loginStatus.textContent =
-        error.message || 'Unable to connect to the server. Please try again.';
-    } finally {
-      loginButton.disabled = false;
-    }
-  });
-</script>
-
+  <app-root></app-root>
 </body>
 </html>
