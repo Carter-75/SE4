@@ -51,14 +51,15 @@
         <label><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
 <input type="radio" name="service" value="Fitness" [checked]="selectedService === 'fitness'" (change)="onServiceChange('fitness')"><span class="service-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><g fill="#fff" stroke="#163c60" stroke-width="3"><path d="M18 27h28v10H18z"/><rect x="9" y="17" width="10" height="30" rx="2"/><rect x="45" y="17" width="10" height="30" rx="2"/><path d="M4 25h5v14H4zM55 25h5v14h-5z"/></g></svg></span><span>Fitness</span></label>
       </fieldset>
-
+      
       <h2>Available appointments</h2>
+      <p *ngif="isLoadingAppointments" role="status">Loading available appointments...</p>
       <p id="selected-date">
             {{ selectedDate ? 'Appointments for ' + selectedDate : 'Select an available day.' }}
       </p>
       <!-- Render provider names and start/end times for the selected day here. Selection enables Confirm and book. -->
 <div id="time-options" class="time-options"></div>
-      <p id="booking-summary" aria-live="polite" *ngIf="selectedDate && filteredSlots.length === 0"> No appointments are available for this date and service.</p>
+      <p id="booking-summary" aria-live="polite" *ngIf="!isLoadingAppointments && selectedDate && filteredSlots.length === 0"> No appointments are available for this date and service.</p>
 
       <label *ngFor="let slot of filteredSlots">
           <input

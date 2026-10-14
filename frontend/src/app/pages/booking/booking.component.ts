@@ -34,6 +34,8 @@ export class BookingPageComponent implements OnInit {
   allSlots: AppointmentSlot[] = [];
   filteredSlots: AppointmentSlot[] = [];
 
+  isLoadingAppointments = false;
+
   selectedService = '';
   selectedMonth = '';
   selectedDate = '';
@@ -62,9 +64,13 @@ export class BookingPageComponent implements OnInit {
   }
 
   async loadAppointments(): Promise<void> {
+    this.isLoadingAppointments = true;
+    this.bookingStatus = '';
+
     try {
       const response = await fetch('/api/appointments/available', {
         credentials: 'include',
+        cache: 'no-store',
       });
 
       const result = await response.json();
@@ -73,14 +79,24 @@ export class BookingPageComponent implements OnInit {
         throw new Error(result.message || 'Could not load appointments.');
       }
 
-      this.allSlots = Array.isArray(result) ? result : [];
+      if (!Array.isArray(result)) {
+        throw new Error('The server returned an unexpected appointment response.');
+      }
+
+      this.allSlots = result;
       this.updateCalendar();
       this.updateFilteredSlots();
     } catch (error: unknown) {
-      this.bookingStatus =
+        this.allSlots = [];
+        this.updateCalendar();
+        this.updateFilteredSlots();
+
+        this.bookingStatus =
         error instanceof Error
           ? error.message
           : 'Unable to load available appointments.';
+    } finally {
+      this.isLoadingAppointments = false;
     }
   }
 
