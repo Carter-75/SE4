@@ -13,9 +13,18 @@ export class RegisterPageComponent {
   accountType = 'customer';
   isLoading = false;
   statusMessage = '';
+  today = '';
 
   constructor() {
     inject(Title).setTitle('Register');
+
+    const now = new Date();
+
+    this.today = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2,'0'),
+      String(now.getDate()).padStart(2,'0'),
+    ].join('-');
   }
 
   onAccountTypeChange(event: Event): void {
@@ -31,6 +40,7 @@ export class RegisterPageComponent {
 
     const firstN = String(formData.get('firstN') ?? '').trim();
     const lastN = String(formData.get('lastN') ?? '').trim();
+    const dob = String(formData.get('dob') ?? '').trim();
     const email = String(formData.get('email') ?? '').trim();
     const username = String(formData.get('username') ?? '').trim();
     const password = String(formData.get('password') ?? '');
@@ -49,11 +59,34 @@ export class RegisterPageComponent {
       !lastN ||
       !email ||
       !username ||
-      !password
+      !password|| 
+      !dob
     ) {
       this.statusMessage = 'Please complete all required fields.';
       return;
     }
+
+    if (
+  !/^\d{4}-\d{2}-\d{2}$/.test(dob) ||
+  dob > this.today
+) {
+  this.statusMessage = 'Please enter a valid date of birth.';
+  return;
+}
+
+  const [year, month, day] = dob.split('-').map(Number);
+  const dobDate = new Date(year, month - 1, day);
+
+  if (
+    dobDate.getFullYear() !== year ||
+    dobDate.getMonth() !== month - 1 ||
+    dobDate.getDate() !== day
+  ) {
+    this.statusMessage = 'Please enter a valid date of birth.';
+    return;
+  }
+    
+    
 
     if (
       type === 'provider' &&
@@ -80,6 +113,7 @@ export class RegisterPageComponent {
           email,
           username,
           password,
+          dob: String(formData.get('dob') ?? '').trim(),
           type,
           serviceType,
           qualifications,

@@ -10,7 +10,9 @@
     
         <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
         <input class="register-input" style="top: 259px" id="last-name" name="lastN" aria-label="Last name" placeholder="last name..." type="text" autocomplete="family-name" required>
-    
+        
+        <label for="dob">Date of Birth</label>
+        <input id="dob" class="register-input" type="date" name="dob" [max]="today" required />
         <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
         <input class="register-input" style="top: 370px" id="email" name="email" aria-label="Email" placeholder="email..." type="email" autocomplete="email" required>
     

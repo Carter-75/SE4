@@ -25,6 +25,7 @@ router.post('/register', async (req, res) => {
       firstN,
       lastN,
       username,
+      dob,
       type,
       serviceType,
       qualifications
@@ -34,10 +35,11 @@ router.post('/register', async (req, res) => {
       !email?.trim() ||
       !password ||
       !firstN?.trim() ||
-      !lastN?.trim()
+      !lastN?.trim() ||
+      !dob
     ) {
       return res.status(400).json({
-        message: 'First name, last name, email, and password are required.'
+        message: 'First name, last name, email, password, and date of birth are required.'
       });
     }
 
@@ -45,6 +47,31 @@ router.post('/register', async (req, res) => {
     const normalizedFirstN = firstN.trim();
     const normalizedLastN = lastN.trim();
 
+    if (
+  typeof dob !== 'string' ||
+  !/^\d{4}-\d{2}-\d{2}$/.test(dob)
+  ) {
+    return res.status(400).json({
+    message: 'Please provide a valid date of birth that is not in the future.'
+    });
+  }
+
+  const [year, month, day] = dob.split('-').map(Number);
+  const dobDate = new Date(Date.UTC(year, month - 1, day));
+
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+
+  if (
+    dobDate.getUTCFullYear() !== year ||
+    dobDate.getUTCMonth() !== month - 1 ||
+    dobDate.getUTCDate() !== day ||
+    dobDate > today
+  ) {
+    return res.status(400).json({
+    message: 'Please provide a valid date of birth that is not in the future.'
+    });
+  }
     // Only allow customer or provider registration publicly.
     const accountType = type || 'customer';
 
@@ -84,7 +111,7 @@ router.post('/register', async (req, res) => {
       type: accountType,
       firstN: normalizedFirstN,
       lastN: normalizedLastN,
-      dob: new Date('2000-01-01'),
+      dob: dobDate,
       active: true,
       loggedIn: false,
       serviceType: accountType === 'provider'

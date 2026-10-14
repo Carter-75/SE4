@@ -84,7 +84,7 @@
 <button id="book-appointment" type="button" [disabled]="!selectedSlotId || isBooking" (click)="bookAppointment()">
   {{isBooking ? 'Booking...' : 'Confirm and book' }} </button>
       <!-- Display success or error messages here; remove hidden when a message is available. -->
-<p id="booking-status" role="status"> {{ bookingStatus }}</p>
+<p id="booking-status" role="status" aria-live="polite" [hidden]="!bookingStatus"> {{ bookingStatus }}</p>
       
     </section>
   </div>
