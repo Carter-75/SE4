@@ -9,8 +9,8 @@ interface AppointmentSlot {
   endTime: string;
   category: string;
   provider?: {
-    firstName?: string;
-    lastName?: string;
+    firstN?: string;
+    lastN?: string;
     serviceType?: string;
     username?: string;
   };
@@ -191,7 +191,7 @@ export class BookingPageComponent implements OnInit {
     this.selectedSlotId = slot._id;
 
     const providerName =
-      `${slot.provider?.firstName ?? ''} ${slot.provider?.lastName ?? ''}`.trim()
+      `${slot.provider?.firstN ?? ''} ${slot.provider?.lastN ?? ''}`.trim()
       || slot.provider?.username
       || 'Provider';
 
@@ -236,7 +236,7 @@ export class BookingPageComponent implements OnInit {
 
       // Remove the booked slot from the local list.
       this.allSlots = this.allSlots.filter(
-        (slot) => slot._id !== result._id
+        (slot) => slot._id !== result.appointment._id
       );
 
       this.updateCalendar();

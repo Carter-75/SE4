@@ -58,6 +58,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true,
     default: ''
+  },
+  serviceType: {
+    type: String,
+    trim: true,
+    default: ''
   }
 });
 

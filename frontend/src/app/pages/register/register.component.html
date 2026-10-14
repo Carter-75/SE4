@@ -6,10 +6,10 @@
     <form method="post" id="register-form" aria-label="Register an account" (submit)="register($event)">
     
         <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-        <input class="register-input" style="top: 148px" id="first-name" name="firstName" aria-label="First name" placeholder="first name..." type="text" autocomplete="given-name" required>
+        <input class="register-input" style="top: 148px" id="first-name" name="firstN" aria-label="First name" placeholder="first name..." type="text" autocomplete="given-name" required>
     
         <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-        <input class="register-input" style="top: 259px" id="last-name" name="lastName" aria-label="Last name" placeholder="last name..." type="text" autocomplete="family-name" required>
+        <input class="register-input" style="top: 259px" id="last-name" name="lastN" aria-label="Last name" placeholder="last name..." type="text" autocomplete="family-name" required>
     
         <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
         <input class="register-input" style="top: 370px" id="email" name="email" aria-label="Email" placeholder="email..." type="email" autocomplete="email" required>
@@ -21,9 +21,7 @@
         <input class="register-input" style="top: 599px" id="register-password" name="password" aria-label="Password" placeholder="password..." type="password" autocomplete="new-password" required>
     
         <!-- CLICK: Validate fields and create account; after success return to index.html for login. -->
-        <button class="register-button" type="submit" [disabled]="isLoading"> 
-            {{ isLoading ? 'Creating account...' : Register!' }} 
-            Register!</button>
+        <button class="register-button" type="submit" [disabled]="isLoading">{{ isLoading ? 'Creating account...' : 'Register!' }}</button>
 
         <!-- Display success or error messages here; remove hidden when a message is available. -->
         <p id="register-status" role="status"  [hidden]="!statusMessage">

@@ -109,7 +109,7 @@ router.get('/available', requireLogin, async (req, res, next) => {
       user: null,
       startTime: { $gt: new Date() }
     })
-      .populate('provider', 'firstName lastName username serviceType')
+      .populate('provider', 'firstN lastN username serviceType')
       .sort({ startTime: 1 });
 
     res.json(appointments);
@@ -138,7 +138,7 @@ router.post(
           new: true,
           runValidators: true
         }
-      ).populate('provider', 'firstName lastName username serviceType');
+      ).populate('provider', 'firstN lastN username serviceType');
 
       if (!appointment) {
         return res.status(409).json({

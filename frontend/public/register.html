@@ -16,9 +16,9 @@
 <div class="auth-page" style="width: 1440px; height: 1024px; background-color: white; padding: 0; position: relative">
   <form method="post" id="register-form" aria-label="Register an account">
     <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input class="register-input" style="top: 148px" id="first-name" name="firstName" aria-label="First name" placeholder="first name..." type="text" autocomplete="given-name" required>
+<input class="register-input" style="top: 148px" id="first-name" name="firstN" aria-label="First name" placeholder="first name..." type="text" autocomplete="given-name" required>
     <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input class="register-input" style="top: 259px" id="last-name" name="lastName" aria-label="Last name" placeholder="last name..." type="text" autocomplete="family-name" required>
+<input class="register-input" style="top: 259px" id="last-name" name="lastN" aria-label="Last name" placeholder="last name..." type="text" autocomplete="family-name" required>
     <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
 <input class="register-input" style="top: 370px" id="email" name="email" aria-label="Email" placeholder="email..." type="email" autocomplete="email" required>
     <!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
@@ -98,8 +98,8 @@ updateProviderFields();
   registerForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const firstName = document.getElementById('first-name').value.trim();
-    const lastName = document.getElementById('last-name').value.trim();
+    const firstN = document.getElementById('first-name').value.trim();
+    const lastN = document.getElementById('last-name').value.trim();
     const email = document.getElementById('email').value.trim();
     const username = document.getElementById('register-username').value.trim();
     const password = document.getElementById('register-password').value;
@@ -119,8 +119,8 @@ updateProviderFields();
         },
         credentials: 'include',
         body: JSON.stringify({
-          firstName,
-          lastName,
+          firstN,
+          lastN,
           email,
           username,
           password,
@@ -137,7 +137,7 @@ updateProviderFields();
       }
 
       registerStatus.textContent =
-        `Registration successful! Welcome, ${result.firstName}.`;
+        `Registration successful! Welcome, ${result.firstN}.`;
 
       // Redirect according to the account type.
       if (result.type === 'customer') {

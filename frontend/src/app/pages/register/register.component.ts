@@ -29,8 +29,8 @@ export class RegisterPageComponent {
     const form = event.currentTarget as HTMLFormElement;
     const formData = new FormData(form);
 
-    const firstName = String(formData.get('firstName') ?? '').trim();
-    const lastName = String(formData.get('lastName') ?? '').trim();
+    const firstN = String(formData.get('firstN') ?? '').trim();
+    const lastN = String(formData.get('lastN') ?? '').trim();
     const email = String(formData.get('email') ?? '').trim();
     const username = String(formData.get('username') ?? '').trim();
     const password = String(formData.get('password') ?? '');
@@ -45,8 +45,8 @@ export class RegisterPageComponent {
     ).trim();
 
     if (
-      !firstName ||
-      !lastName ||
+      !firstN ||
+      !lastN ||
       !email ||
       !username ||
       !password
@@ -75,8 +75,8 @@ export class RegisterPageComponent {
         },
         credentials: 'include',
         body: JSON.stringify({
-          firstName,
-          lastName,
+          firstN,
+          lastN,
           email,
           username,
           password,

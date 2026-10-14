@@ -222,7 +222,7 @@
       const details = document.createElement('span');
       const provider = appointment.provider;
       const providerName =
-        `${provider.firstName || ''} ${provider.lastName || ''}`.trim() ||
+        `${provider.firstN || ''} ${provider.lastN || ''}`.trim() ||
         provider.username ||
         'Provider';
 

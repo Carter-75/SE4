@@ -8,8 +8,8 @@ function publicUser(user) {
   return {
     id: user._id.toString(),
     email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
+    firstN: user.firstN,
+    lastN: user.lastN,
     username: user.username,
     type: user.type,
     active: user.active
@@ -22,8 +22,8 @@ router.post('/register', async (req, res) => {
     const {
       email,
       password,
-      firstName,
-      lastName,
+      firstN,
+      lastN,
       username,
       type,
       serviceType,
@@ -33,8 +33,8 @@ router.post('/register', async (req, res) => {
     if (
       !email?.trim() ||
       !password ||
-      !firstName?.trim() ||
-      !lastName?.trim()
+      !firstN?.trim() ||
+      !lastN?.trim()
     ) {
       return res.status(400).json({
         message: 'First name, last name, email, and password are required.'
@@ -42,8 +42,8 @@ router.post('/register', async (req, res) => {
     }
 
     const normalizedEmail = email.trim().toLowerCase();
-    const normalizedFirstName = firstName.trim();
-    const normalizedLastName = lastName.trim();
+    const normalizedFirstN = firstN.trim();
+    const normalizedLastN = lastN.trim();
 
     // Only allow customer or provider registration publicly.
     const accountType = type || 'customer';
@@ -80,12 +80,10 @@ router.post('/register', async (req, res) => {
     const user = await User.create({
       email: normalizedEmail,
       password,
-      firstName: normalizedFirstName,
-      lastName: normalizedLastName,
       username: normalizedUsername,
       type: accountType,
-      firstN: normalizedFirstName,
-      lastN: normalizedLastName,
+      firstN: normalizedFirstN,
+      lastN: normalizedLastN,
       dob: new Date('2000-01-01'),
       active: true,
       loggedIn: false,
@@ -108,8 +106,8 @@ router.post('/register', async (req, res) => {
       return res.status(201).json({
         id: user._id.toString(),
         email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        firstN: user.firstN,
+        lastN: user.lastN,
         username: user.username,
         type: user.type,
         active: user.active
