@@ -81,7 +81,8 @@
 
       <p aria-live="polite">{{ bookingSummary }}</p>
       <!-- CLICK: Book the selected slot for the authenticated customer; recheck availability on the server and show confirmation. -->
-<button id="book-appointment" type="button" [disabled]="!selectedSlotId || isBooking" (click)="bookAppointment()">Confirm and book</button>
+<button id="book-appointment" type="button" [disabled]="!selectedSlotId || isBooking" (click)="bookAppointment()">
+  {{isBooking ? 'Booking...' : 'Confirm and book' }} </button>
       <!-- Display success or error messages here; remove hidden when a message is available. -->
 <p id="booking-status" role="status"> {{ bookingStatus }}</p>
       

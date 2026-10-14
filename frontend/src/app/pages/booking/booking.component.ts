@@ -229,18 +229,21 @@ export class BookingPageComponent implements OnInit {
         );
       }
 
-      this.bookingStatus = 'Appointment booked successfully!';
+      this.bookingStatus = result.message || 'Appointment booked successfully!';
       this.bookingSummary = '';
       this.selectedSlotId = '';
       this.selectedSlot = null;
 
       // Remove the booked slot from the local list.
+       const bookedAppointmentId = result.appointment?._id || result._id;
+
       this.allSlots = this.allSlots.filter(
-        (slot) => slot._id !== result.appointment._id
+        (slot) => slot._id !== bookedAppointmentId
       );
 
       this.updateCalendar();
       this.updateFilteredSlots();
+      
     } catch (error: unknown) {
       this.bookingStatus =
         error instanceof Error

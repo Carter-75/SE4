@@ -12,7 +12,7 @@
       <label>Appointment title<!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
 <input name="appointmentTitle" required placeholder="e.g. Hair Highlight"></label>
       <label>Date<!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="date" name="date" required value="2026-10-20"></label>
+<input type="date" name="date" required [min]="today"></label>
       <label>Start time<!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
 <input type="time" name="startTime" required value="15:00"></label>
       <label>End time<!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
@@ -89,7 +89,7 @@
     </fieldset>
     <div class="schedule-actions"><!-- CLICK: Save checked weekdays and their start/end times for the signed-in provider; show success here. -->
 <button type="submit">Save schedule</button><!-- Navigation link: opens provider.html. -->
-<a href="provider.html">Back to home</a></div>
+<a routerLink="provider">Back to home</a></div>
     
     <!-- Display success or error messages here; remove hidden when a message is available. -->
 <p id="schedule-status" role="status"></p>
