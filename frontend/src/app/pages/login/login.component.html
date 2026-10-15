@@ -15,12 +15,18 @@
      
           <!-- CLICK: Authenticate username/password; route returned customer role to customer.html, provider to provider.html. Admin page is not supplied yet. -->
 
-          <button class="login-button" type="submit" [disabled]="isLoading">Login</button>
-           {{ isLoading ? 'Logging in...' : 'Login'}}
+          <button class="login-button" type="submit" [disabled]="isLoading">
+            {{ isLoading ? 'Logging in...' : 'Log In' }}
+          </button>
+           
 
      <!-- Display success or error messages here; remove hidden when a message is available. -->
 
-     <p id="login-status" role="status" [hidden]="!statusMessage"> {{statusMessage }} </p>
+     @if (statusMessage) {
+      <p id="login-status" role="alert">
+         {{ statusMessage }}
+      </p>
+}
 
    </form>
    <!-- Navigation link: opens register.html. -->
