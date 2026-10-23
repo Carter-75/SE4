@@ -1,7 +1,10 @@
-<details class="settings-dropdown">
-  <summary>Settings</summary>
-  <div class="settings-dropdown-menu">
-    <a routerLink="/settings">Settings</a>
-    <button type="button" (click)="logout()">Logout</button>
-  </div>
-</details>
+<nav class="top-nav">
+  <details class="settings-dropdown">
+    <summary>Settings</summary>
+    <div class="settings-mini-page">
+      <button type="button" routerLink="/customer">Customer home</button>
+      <button type="button" routerLink="/provider">Provider home</button>
+      <button type="button" (click)="logout()">Logout</button>
+    </div>
+  </details>
+</nav>

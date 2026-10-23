@@ -5,7 +5,6 @@ import { AvailabilityPageComponent } from './pages/availability/availability.com
 import { BookingPageComponent } from './pages/booking/booking.component';
 import { CustomerPageComponent } from './pages/customer/customer.component';
 import { ProviderPageComponent } from './pages/provider/provider.component';
-import { SettingsPageComponent } from './pages/settings/settings.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -15,6 +14,5 @@ export const routes: Routes = [
   { path: 'booking', component: BookingPageComponent },
   { path: 'customer', component: CustomerPageComponent },
   { path: 'provider', component: ProviderPageComponent },
-  { path: 'settings', component: SettingsPageComponent },
   { path: '**', redirectTo: 'login' },
 ];
