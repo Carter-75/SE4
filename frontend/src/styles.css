@@ -283,3 +283,11 @@ body { margin:0; }
   color: black;
   overflow-wrap: anywhere;
 }
+
+.settings-dropdown { position: relative; margin-bottom: 16px; font-size: 20px; }
+.settings-dropdown summary { cursor: pointer; }
+.settings-dropdown-menu { display: flex; gap: 12px; margin-top: 8px; align-items: center; }
+.settings-dropdown-menu a { color: black; }
+.settings-dropdown-menu button { padding: 8px 16px; cursor: pointer; }
+.settings-page { display: flex; gap: 16px; padding: 24px; flex-wrap: wrap; }
+.settings-page button { padding: 12px 20px; cursor: pointer; }

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
+import { SettingsDropdownComponent } from '../../components/settings-dropdown/settings-dropdown.component';
 
 interface AppointmentSlot {
   _id: string;
@@ -25,7 +26,7 @@ interface CalendarDay {
 @Component({
   selector: 'app-booking-page',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, SettingsDropdownComponent],
   templateUrl: './booking.component.html',
 })
 export class BookingPageComponent implements OnInit {

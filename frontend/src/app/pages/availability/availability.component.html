@@ -2,6 +2,7 @@
 
 <!-- Main page layout; styles.css adapts it to the browser width. -->
 <main class="schedule-page">
+  <app-settings-dropdown></app-settings-dropdown>
   <h1>Make your Schedule!</h1>
   <section class="slot-creation">
     <h2>Create an appointment slot</h2>
@@ -24,74 +25,4 @@
     <p>The provider name comes from the signed-in account.</p>
 
   </section>
-  <h2>Weekly work hours</h2>
-  <form method="post" id="availability-form">
-    <fieldset>
-      <legend>What days can you work?</legend>
-      <p class="schedule-help">Select each workday and set its start and end times.</p>
-      <div class="schedule-head" aria-hidden="true"><span>Day</span><span>From</span><span>To</span></div>
-      <div class="schedule-row" data-day="monday">
-        <label class="day-label"><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="checkbox" name="mondayEnabled"> Monday</label>
-        <label><span class="sr-only">Monday start time</span><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="time" name="mondayStart" disabled></label>
-        <label><span class="sr-only">Monday end time</span><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="time" name="mondayEnd" disabled></label>
-      </div>
-      <div class="schedule-row" data-day="tuesday">
-        <label class="day-label"><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="checkbox" name="tuesdayEnabled"> Tuesday</label>
-        <label><span class="sr-only">Tuesday start time</span><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="time" name="tuesdayStart" disabled></label>
-        <label><span class="sr-only">Tuesday end time</span><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="time" name="tuesdayEnd" disabled></label>
-      </div>
-      <div class="schedule-row" data-day="wednesday">
-        <label class="day-label"><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="checkbox" name="wednesdayEnabled"> Wednesday</label>
-        <label><span class="sr-only">Wednesday start time</span><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="time" name="wednesdayStart" disabled></label>
-        <label><span class="sr-only">Wednesday end time</span><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="time" name="wednesdayEnd" disabled></label>
-      </div>
-      <div class="schedule-row" data-day="thursday">
-        <label class="day-label"><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="checkbox" name="thursdayEnabled"> Thursday</label>
-        <label><span class="sr-only">Thursday start time</span><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="time" name="thursdayStart" disabled></label>
-        <label><span class="sr-only">Thursday end time</span><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="time" name="thursdayEnd" disabled></label>
-      </div>
-      <div class="schedule-row" data-day="friday">
-        <label class="day-label"><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="checkbox" name="fridayEnabled"> Friday</label>
-        <label><span class="sr-only">Friday start time</span><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="time" name="fridayStart" disabled></label>
-        <label><span class="sr-only">Friday end time</span><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="time" name="fridayEnd" disabled></label>
-      </div>
-      <div class="schedule-row" data-day="saturday">
-        <label class="day-label"><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="checkbox" name="saturdayEnabled"> Saturday</label>
-        <label><span class="sr-only">Saturday start time</span><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="time" name="saturdayStart" disabled></label>
-        <label><span class="sr-only">Saturday end time</span><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="time" name="saturdayEnd" disabled></label>
-      </div>
-      <div class="schedule-row" data-day="sunday">
-        <label class="day-label"><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="checkbox" name="sundayEnabled"> Sunday</label>
-        <label><span class="sr-only">Sunday start time</span><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="time" name="sundayStart" disabled></label>
-        <label><span class="sr-only">Sunday end time</span><!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
-<input type="time" name="sundayEnd" disabled></label>
-      </div>
-    </fieldset>
-    <div class="schedule-actions"><!-- CLICK: Save checked weekdays and their start/end times for the signed-in provider; show success here. -->
-<button type="submit">Save schedule</button><!-- Navigation link: opens provider.html. -->
-<a routerLink="provider">Back to home</a></div>
-    
-    <!-- Display success or error messages here; remove hidden when a message is available. -->
-<p id="schedule-status" role="status"></p>
-  </form>
 </main>
