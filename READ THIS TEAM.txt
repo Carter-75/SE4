@@ -10,3 +10,4 @@ then npm run dev
 that it its setup for u with a script ive made a while 
 ago just had to fix it a bit
 
+ 

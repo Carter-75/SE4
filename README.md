@@ -13,5 +13,5 @@ Ensure your `.env.local` file is updated with your `MONGODB_URI`.
 
 ### 2. Launch Full Stack
 ```bash
-npm run dev
+npm run dev 
 ```
