@@ -107,6 +107,7 @@ router.get('/available', requireLogin, async (req, res, next) => {
   try {
     const appointments = await Appointment.find({
       user: null,
+      provider: { $ne: req.user._id },
       startTime: { $gt: new Date() }
     })
       .populate('provider', 'firstN lastN username serviceType')
@@ -125,6 +126,17 @@ router.post(
   requireBooker,
   async (req, res, next) => {
     try {
+      const ownSlot = await Appointment.findOne({
+        _id: req.params.id,
+        provider: req.user._id
+      });
+
+      if (ownSlot) {
+        return res.status(409).json({
+          message: 'You cannot book your own appointment slot.'
+        });
+      }
+
       const appointment = await Appointment.findOneAndUpdate(
         {
           _id: req.params.id,
