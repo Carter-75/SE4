@@ -1,0 +1,5 @@
+<main class="settings-page">
+  <button type="button" routerLink="/customer">Customer view</button>
+  <button type="button" routerLink="/provider" *ngIf="isProvider">Provider view</button>
+  <button type="button" (click)="logout()">Logout</button>
+</main>

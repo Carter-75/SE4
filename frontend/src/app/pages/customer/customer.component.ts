@@ -1,12 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
-import { SettingsDropdownComponent } from '../../components/settings-dropdown/settings-dropdown.component';
 
 @Component({
   selector: 'app-customer-page',
   standalone: true,
-  imports: [RouterLink, SettingsDropdownComponent],
+  imports: [RouterLink],
   templateUrl: './customer.component.html',
 })
 export class CustomerPageComponent {
