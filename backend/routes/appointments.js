@@ -24,10 +24,10 @@ function requireProvider(req, res, next) {
   next();
 }
 
-function requireCustomer(req, res, next) {
-  if (req.user.type !== 'customer') {
+function requireBooker(req, res, next) {
+  if (req.user.type !== 'customer' && req.user.type !== 'provider') {
     return res.status(403).json({
-      message: 'Only customers can book appointments.'
+      message: 'Only customers and providers can book appointments.'
     });
   }
 
@@ -107,6 +107,7 @@ router.get('/available', requireLogin, async (req, res, next) => {
   try {
     const appointments = await Appointment.find({
       user: null,
+      provider: { $ne: req.user._id },
       startTime: { $gt: new Date() }
     })
       .populate('provider', 'firstN lastN username serviceType')
@@ -122,9 +123,20 @@ router.get('/available', requireLogin, async (req, res, next) => {
 router.post(
   '/:id/book',
   requireLogin,
-  requireCustomer,
+  requireBooker,
   async (req, res, next) => {
     try {
+      const ownSlot = await Appointment.findOne({
+        _id: req.params.id,
+        provider: req.user._id
+      });
+
+      if (ownSlot) {
+        return res.status(409).json({
+          message: 'You cannot book your own appointment slot.'
+        });
+      }
+
       const appointment = await Appointment.findOneAndUpdate(
         {
           _id: req.params.id,

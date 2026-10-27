@@ -1,15 +1,16 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-availability-page',
   standalone: true,
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './availability.component.html',
 })
 
-export class AvailabilityPageComponent {
+export class AvailabilityPageComponent implements OnInit {
+  private router = inject(Router);
   slotStatus = '';
   today ='';
 
@@ -23,6 +24,23 @@ export class AvailabilityPageComponent {
       String(now.getMonth() + 1).padStart(2,'0'),
       String(now.getDate()).padStart(2,'0'),
     ].join('-');
+  }
+
+  async ngOnInit(): Promise<void> {
+    try {
+      const response = await fetch('/api/auth/user', {
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const user = await response.json();
+
+        if (user.type === 'customer') {
+          await this.router.navigate(['/customer']);
+        }
+      }
+    } catch {
+    }
   }
 
   async createSlot(event: SubmitEvent): Promise<void> {

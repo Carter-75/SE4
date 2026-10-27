@@ -283,3 +283,6 @@ body { margin:0; }
   color: black;
   overflow-wrap: anywhere;
 }
+
+.settings-page { display: flex; gap: 16px; padding: 24px; flex-wrap: wrap; }
+.settings-page button { padding: 12px 20px; cursor: pointer; }
