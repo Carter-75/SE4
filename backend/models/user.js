@@ -1,66 +1,66 @@
-
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   // Fields used by the application
-  username: {
+  username: { // Unique username that identifies a specific user
     type: String,
     required: true,
     unique: true,
     trim: true
   },
-  type: {
+  type: { // Type of user account
     type: String,
     enum: ['customer', 'provider', 'admin'],
     default: 'customer',
     required: true
   },
-  firstN: {
+  firstN: { // User's first name
     type: String,
     required: true
   },
-  lastN: {
+  lastN: { // User's last name
     type: String,
-      required: true
+    required: true
   },
-  dob: {
+  dob: { // User's date of birth
     type: Date,
     default: () => new Date('2000-01-01'),
     required: true
   },
-  email: {
+  email: { // Unique email associated with a user account
     type: String,
     required: true,
     unique: true,
     lowercase: true,
     trim: true
   },
-  password: {
+  password: { // Password used for authentication
     type: String,
     required: true
   },
-  active: {
+  active: { // Identifies whether a user account is active or has been soft deleted
     type: Boolean,
     default: true,
     required: true
   },
-  loggedIn: {
+  loggedIn: { // Identifies if there is an active login session for the user account
     type: Boolean,
     default: false,
     required: true
   },
-  createdAt: {
+  createdAt: { // Day and time the user account was created
     type: Date,
     default: Date.now
   },
-  qualifications: {
+  qualifications: { // User's qualifications; only relevant to service providers
     type: String,
     trim: true,
     default: ''
   },
-  serviceType: {
-    type: String,
+  serviceType: { // The types of service a service provider account can provide
+    type: [String],
+    enum: ['beauty', 'fitness', 'medical'],
     trim: true,
     default: ''
   }
@@ -86,4 +86,3 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
 };
 
 module.exports = mongoose.model('User', userSchema);
-
