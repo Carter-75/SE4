@@ -107,6 +107,7 @@ router.get('/available', requireLogin, async (req, res, next) => {
   try {
     const appointments = await Appointment.find({
       user: null,
+      status: { $ne: 'cancelled' },
       provider: { $ne: req.user._id },
       startTime: { $gt: new Date() }
     })
@@ -141,10 +142,11 @@ router.post(
         {
           _id: req.params.id,
           user: null,
+          status: { $ne: 'cancelled' },
           startTime: { $gt: new Date() }
         },
         {
-          $set: { user: req.user._id }
+          $set: { user: req.user._id, status: 'booked' }
         },
         {
           new: true,

@@ -84,10 +84,16 @@ router.post('/register', async (req, res) => {
     // Providers must supply their service information.
     if (
       accountType === 'provider' &&
-      (!serviceType?.trim() || !qualifications?.trim())
+      (typeof serviceType !== 'string' || !serviceType.trim() || !qualifications?.trim())
     ) {
       return res.status(400).json({
         message: 'Service type and qualifications are required for providers.'
+      });
+    }
+
+    if (typeof password !== 'string' || password.length < 8) {
+      return res.status(400).json({
+        message: 'Password must be at least 8 characters.'
       });
     }
 
@@ -104,6 +110,12 @@ router.post('/register', async (req, res) => {
     const normalizedUsername =
       username?.trim() || normalizedEmail.split('@')[0];
 
+    if (await User.findOne({ username: normalizedUsername })) {
+      return res.status(409).json({
+        message: 'This username is already taken.'
+      });
+    }
+
     const user = await User.create({
       email: normalizedEmail,
       password,
@@ -115,8 +127,8 @@ router.post('/register', async (req, res) => {
       active: true,
       loggedIn: false,
       serviceType: accountType === 'provider'
-        ? serviceType.trim()
-        : '',
+        ? [serviceType.trim().toLowerCase()]
+        : [],
       qualifications: accountType === 'provider'
         ? qualifications.trim()
         : ''
@@ -182,7 +194,7 @@ router.get('/user', (req, res) => {
 });
 
 // --- Logout ---
-router.get('/logout', (req, res, next) => {
+router.post('/logout', (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
 

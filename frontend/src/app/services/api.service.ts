@@ -50,6 +50,6 @@ export class ApiService {
   logout(): Observable<any> {
     localStorage.removeItem('auth_token');
     this.currentUser.set(null);
-    return this.http.get<any>(`${this.apiUrl}/auth/logout`);
+    return this.http.post<any>(`${this.apiUrl}/auth/logout`, {});
   }
 }

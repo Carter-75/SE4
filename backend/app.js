@@ -136,17 +136,12 @@ app.use(helmet({
 }));
 
 app.use(cors({
-  origin: true,
+  origin: isProd ? prodUrl || false : true,
   credentials: true
 }));
 
 // Apply DB check to all /api routes
 app.use('/api', dbCheck);
-
-app.use(cors({
-  origin: true,
-  credentials: true
-}));
 
 app.use(logger('dev'));
 app.use(express.json());

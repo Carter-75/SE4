@@ -62,7 +62,7 @@ const userSchema = new mongoose.Schema({
     type: [String],
     enum: ['beauty', 'fitness', 'medical'],
     trim: true,
-    default: ''
+    default: []
   }
 });
 

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 
 const notificationSchema = new mongoose.Schema({
   // Fields used by the application

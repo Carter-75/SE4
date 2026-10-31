@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 
 const appointmentSchema = new mongoose.Schema({
   // Fields used by the application

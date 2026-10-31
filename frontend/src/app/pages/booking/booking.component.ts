@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 
@@ -30,6 +30,7 @@ interface CalendarDay {
 })
 export class BookingPageComponent implements OnInit {
   private title = inject(Title);
+  private cdr = inject(ChangeDetectorRef);
 
   allSlots: AppointmentSlot[] = [];
   filteredSlots: AppointmentSlot[] = [];
@@ -97,6 +98,7 @@ export class BookingPageComponent implements OnInit {
           : 'Unable to load available appointments.';
     } finally {
       this.isLoadingAppointments = false;
+      this.cdr.detectChanges();
     }
   }
 
@@ -267,6 +269,7 @@ export class BookingPageComponent implements OnInit {
           : 'Unable to book this appointment.';
     } finally {
       this.isBooking = false;
+      this.cdr.detectChanges();
     }
   }
 

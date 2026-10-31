@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterPageComponent {
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   accountType = 'customer';
   isLoading = false;
@@ -88,6 +89,11 @@ export class RegisterPageComponent {
     
     
 
+    if (password.length < 8) {
+      this.statusMessage = 'Password must be at least 8 characters.';
+      return;
+    }
+
     if (
       type === 'provider' &&
       (!serviceType || !qualifications)
@@ -143,6 +149,7 @@ export class RegisterPageComponent {
           : 'Unable to connect to the server. Please try again.';
     } finally {
       this.isLoading = false;
+      this.cdr.detectChanges();
     }
   }
 }

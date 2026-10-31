@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 
@@ -11,6 +11,7 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class SettingsPageComponent implements OnInit {
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   isProvider = false;
 
@@ -27,6 +28,7 @@ export class SettingsPageComponent implements OnInit {
       if (response.ok) {
         const user = await response.json();
         this.isProvider = user.type === 'provider';
+        this.cdr.detectChanges();
       }
     } catch {
     }
@@ -35,6 +37,7 @@ export class SettingsPageComponent implements OnInit {
   async logout(): Promise<void> {
     try {
       await fetch('/api/auth/logout', {
+        method: 'POST',
         credentials: 'include',
       });
     } catch {

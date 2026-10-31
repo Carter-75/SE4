@@ -9,7 +9,7 @@
     <p>Choose a specific date and service for customers to book.</p>
     <form method="post" class="requirements-form" id="slot-form" (submit)="createSlot($event)">
       <label>Service type<!-- Dropdown: read the selected value when handling this form. -->
-<select name="serviceType" required><option>Beauty</option><option>Medical</option><option>Fitness</option></select></label>
+<select name="serviceType" required><option value="beauty">Beauty</option><option value="medical">Medical</option><option value="fitness">Fitness</option></select></label>
       <label>Appointment title<!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->
 <input name="appointmentTitle" required placeholder="e.g. Hair Highlight"></label>
       <label>Date<!-- Input: name identifies the value to send; type sets text, password, date, time, or selection behavior. -->

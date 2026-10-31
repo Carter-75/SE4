@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 
 export class AvailabilityPageComponent implements OnInit {
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
   slotStatus = '';
   today ='';
 
@@ -97,6 +98,8 @@ export class AvailabilityPageComponent implements OnInit {
         error instanceof Error
           ? error.message
           : 'Could not create appointment slot.';
+    } finally {
+      this.cdr.detectChanges();
     }
   }
 }
