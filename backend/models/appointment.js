@@ -3,38 +3,43 @@ const bcrypt = require('bcryptjs');
 
 const appointmentSchema = new mongoose.Schema({
   // Fields used by the application
-  title: {
+  title: { // Title of the appointment
     type: String,
     required: true
   },
-  user: {
+  user: { // Customer who booked the appointment
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', // Reference to the User model
-    default:null
+    default: null
   },
-  provider: {
+  provider: { // Provider who created the appointment
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', // Reference to the User model
     required: true
   },
-  startTime: {
-    type: Date,
-      required: true
-  },
-  endTime: {
+  startTime: { // Time appointment starts
     type: Date,
     required: true
   },
-  category: {
+  endTime: { // Time appointment ends
+    type: Date,
+    required: true
+  },
+  category: { // Type of service the appointment offers
     type: String,
     enum: ['beauty', 'fitness', 'medical'],
     required: true
   },
-  description: {
+  status: { // Status of the appointment
+    type: String,
+    enum: ['active', 'booked', 'cancelled'],
+    required: true,
+    default: 'active'
+  },
+  description: { // Full appointment description
     type: String
   },
-
-  createdAt: {
+  createdAt: { // Date and time appointment was created
     type: Date,
     default: Date.now
   }
