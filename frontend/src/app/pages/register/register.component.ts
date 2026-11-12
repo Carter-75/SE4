@@ -1,10 +1,12 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { BackButtonComponent } from '../../components/back-button/back-button.component';
 
 @Component({
   selector: 'app-register-page',
   standalone: true,
+  imports: [RouterLink, BackButtonComponent],
   templateUrl: './register.component.html',
 })
 export class RegisterPageComponent {

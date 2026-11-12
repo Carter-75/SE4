@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
+import { BackButtonComponent } from '../../components/back-button/back-button.component';
 
 interface AppointmentSlot {
   _id: string;
@@ -25,7 +26,7 @@ interface CalendarDay {
 @Component({
   selector: 'app-booking-page',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, BackButtonComponent],
   templateUrl: './booking.component.html',
 })
 export class BookingPageComponent implements OnInit {

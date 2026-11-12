@@ -286,3 +286,6 @@ body { margin:0; }
 
 .settings-page { display: flex; gap: 16px; padding: 24px; flex-wrap: wrap; }
 .settings-page button { padding: 12px 20px; cursor: pointer; }
+.back-button { padding: 12px 20px; cursor: pointer; }
+.register-login-button { position: absolute; top: 824px; left: 319px; width: 340px; height: 72px; box-sizing: border-box; border: 0; background: rgb(217, 217, 217); color: black; font-family: Inter, serif; font-size: 20px; cursor: pointer; }
+.register-login-button:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }

@@ -1,11 +1,12 @@
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { BackButtonComponent } from '../../components/back-button/back-button.component';
 
 @Component({
   selector: 'app-availability-page',
   standalone: true,
-  imports: [],
+  imports: [BackButtonComponent],
   templateUrl: './availability.component.html',
 })
 
