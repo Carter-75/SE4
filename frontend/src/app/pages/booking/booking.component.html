@@ -55,7 +55,7 @@
       </fieldset>
       
       <h2>Available appointments</h2>
-      <p *ngif="isLoadingAppointments" role="status">Loading available appointments...</p>
+      <p *ngIf="isLoadingAppointments" role="status">Loading available appointments...</p>
       <p id="selected-date">
             {{ selectedDate ? 'Appointments for ' + selectedDate : 'Select an available day.' }}
       </p>
