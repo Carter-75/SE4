@@ -134,7 +134,7 @@ router.post(
         });
       }
       const existingAppointment = await Appointment.findOne({
-        provider: req.user._id,
+        $or: [{ provider: req.user._id }, { user: req.user._id }],
         status: { $ne: 'cancelled' },
         startTime: { $lt: end },
         endTime: { $gt: start }
@@ -216,7 +216,7 @@ router.post(
 
       // Check whether the user already has an overlapping booking.
       const conflictingBooking = await Appointment.findOne({
-        user: req.user._id,
+        $or: [{ provider: req.user._id }, { user: req.user._id }],
         status: { $ne: 'cancelled' },
         startTime: { $lt: requestedAppointment.endTime },
         endTime: { $gt: requestedAppointment.startTime }
