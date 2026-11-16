@@ -24,6 +24,12 @@
       }
     }
   ],
+  "crons": [
+    {
+      "path": "/api/notifications/reminders/run",
+      "schedule": "0 14 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
