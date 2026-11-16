@@ -21,7 +21,22 @@ const notificationSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
     required: true
+  },
+  kind: {
+    type: String,
+    enum: ['booked', 'unbooked', 'cancelled', 'reminder'],
+    default: 'booked',
+    required: true
+  },
+  message: {
+    type: String,
+    default: ''
+  },
+  read: {
+    type: Boolean,
+    default: false,
+    required: true
   }
 });
 
-module.exports = mongoose.model('Notification', notificationSchema);
+module.exports = mongoose.model('Notification', notificationSchema, 'notification');

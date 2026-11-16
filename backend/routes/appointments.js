@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Appointment = require('../models/appointment');
+const Notification = require('../models/notification');
 
 // Make sure the user is logged in
 function requireLogin(req, res, next) {
@@ -33,6 +34,20 @@ function requireBooker(req, res, next) {
 
   next();
 }
+function createNotification(data) {
+  return Notification.create(data).catch(() => null);
+}
+
+function formatAppointmentTime(date) {
+  return new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit'
+  }).format(date);
+}
+
 function centralTimeToUTC(date, time) {
   const [year, month, day] = date.split('-').map(Number);
   const [hour, minute] = time.split(':').map(Number);
@@ -164,6 +179,21 @@ router.post(
   }
 );
 
+router.get('/mine', requireLogin, async (req, res, next) => {
+  try {
+    const appointments = await Appointment.find({
+      $or: [{ user: req.user._id }, { provider: req.user._id }]
+    })
+      .populate('provider', 'firstN lastN username serviceType')
+      .populate('user', 'firstN lastN username')
+      .sort({ startTime: 1 });
+
+    res.json(appointments);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Get all future appointment slots that are available
 router.get('/available', requireLogin, async (req, res, next) => {
   try {
@@ -249,6 +279,13 @@ router.post(
         });
       }
 
+      await createNotification({
+        provider: appointment.provider._id,
+        appointment: appointment._id,
+        kind: 'booked',
+        message: `"${appointment.title}" was booked for ${formatAppointmentTime(appointment.startTime)}.`
+      });
+
       res.json({
         message: 'Appointment booked successfully.',
         appointment
@@ -258,5 +295,75 @@ router.post(
     }
   }
 );
+
+router.post('/:id/unbook', requireLogin, async (req, res, next) => {
+  try {
+    const appointment = await Appointment.findOne({
+      _id: req.params.id,
+      user: req.user._id,
+      status: 'booked'
+    });
+
+    if (!appointment) {
+      return res.status(404).json({
+        message: 'Booked appointment not found.'
+      });
+    }
+
+    appointment.user = null;
+    appointment.status = 'active';
+    await appointment.save();
+
+    await createNotification({
+      provider: appointment.provider,
+      appointment: appointment._id,
+      kind: 'unbooked',
+      message: `"${appointment.title}" on ${formatAppointmentTime(appointment.startTime)} was unbooked and is open again.`
+    });
+
+    res.json({
+      message: 'Appointment unbooked successfully.',
+      appointment
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/:id/cancel', requireLogin, async (req, res, next) => {
+  try {
+    const appointment = await Appointment.findOne({
+      _id: req.params.id,
+      provider: req.user._id,
+      status: { $ne: 'cancelled' }
+    });
+
+    if (!appointment) {
+      return res.status(404).json({
+        message: 'Appointment not found.'
+      });
+    }
+
+    const booker = appointment.user;
+    appointment.status = 'cancelled';
+    await appointment.save();
+
+    if (booker) {
+      await createNotification({
+        user: booker,
+        appointment: appointment._id,
+        kind: 'cancelled',
+        message: `"${appointment.title}" on ${formatAppointmentTime(appointment.startTime)} was cancelled by the provider.`
+      });
+    }
+
+    res.json({
+      message: 'Appointment cancelled successfully.',
+      appointment
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
