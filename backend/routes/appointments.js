@@ -33,6 +33,43 @@ function requireBooker(req, res, next) {
 
   next();
 }
+function centralTimeToUTC(date, time) {
+  const [year, month, day] = date.split('-').map(Number);
+  const [hour, minute] = time.split(':').map(Number);
+
+  const desiredUTC = Date.UTC(year, month - 1, day, hour, minute);
+
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23'
+  });
+
+  let timestamp = desiredUTC;
+
+  for (let i = 0; i < 3; i++) {
+    const parts = formatter.formatToParts(new Date(timestamp));
+    const values = Object.fromEntries(
+      parts.map(part => [part.type, part.value])
+    );
+
+    const displayedAsUTC = Date.UTC(
+      Number(values.year),
+      Number(values.month) - 1,
+      Number(values.day),
+      Number(values.hour),
+      Number(values.minute)
+    );
+
+    timestamp += desiredUTC - displayedAsUTC;
+  }
+
+  return new Date(timestamp);
+}
 
 // Create an available appointment slot
 router.post(
@@ -70,8 +107,8 @@ router.post(
       }
 
       // Combine the selected date and times.
-      const start = new Date(`${date}T${startTime}:00`);
-      const end = new Date(`${date}T${endTime}:00`);
+      const start = centralTimeToUTC(date, startTime);
+      const end = centralTimeToUTC(date, endTime);
 
       if (
         Number.isNaN(start.getTime()) ||
@@ -82,7 +119,18 @@ router.post(
           message: 'End time must be later than start time.'
         });
       }
+      const existingAppointment = await Appointment.findOne({
+        provider: req.user._id,
+        status: { $ne: 'cancelled' },
+        startTime: { $lt: end },
+        endTime: { $gt: start }
+      });
 
+      if (existingAppointment) {
+        return res.status(409).json({
+          message: 'You already have an appointment during this time.'
+        });
+      }
       const appointment = await Appointment.create({
         title: appointmentTitle.trim(),
         provider: req.user._id,
@@ -138,6 +186,33 @@ router.post(
         });
       }
 
+      // Find the appointment the user is trying to book.
+      const requestedAppointment = await Appointment.findOne({
+        _id: req.params.id,
+        user: null,
+        status: { $ne: 'cancelled' },
+        startTime: { $gt: new Date() }
+      });
+
+      if (!requestedAppointment) {
+        return res.status(409).json({
+          message: 'This appointment is no longer available.'
+        });
+      }
+
+      // Check whether the user already has an overlapping booking.
+      const conflictingBooking = await Appointment.findOne({
+        user: req.user._id,
+        status: { $ne: 'cancelled' },
+        startTime: { $lt: requestedAppointment.endTime },
+        endTime: { $gt: requestedAppointment.startTime }
+      });
+
+      if (conflictingBooking) {
+        return res.status(409).json({
+          message: 'You already have an appointment during this time.'
+        });
+      }
       const appointment = await Appointment.findOneAndUpdate(
         {
           _id: req.params.id,

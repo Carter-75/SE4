@@ -89,11 +89,11 @@ export class BookingPageComponent implements OnInit {
       this.updateCalendar();
       this.updateFilteredSlots();
     } catch (error: unknown) {
-        this.allSlots = [];
-        this.updateCalendar();
-        this.updateFilteredSlots();
+      this.allSlots = [];
+      this.updateCalendar();
+      this.updateFilteredSlots();
 
-        this.bookingStatus =
+      this.bookingStatus =
         error instanceof Error
           ? error.message
           : 'Unable to load available appointments.';
@@ -248,21 +248,21 @@ export class BookingPageComponent implements OnInit {
         );
       }
 
-    this.bookingStatus = result.message || 'Appointment booked successfully!';
-    this.bookingSummary = '';
-    this.selectedSlotId = '';
-    this.selectedSlot = null;
+      this.bookingStatus = result.message || 'Appointment booked successfully!';
+      this.bookingSummary = '';
+      this.selectedSlotId = '';
+      this.selectedSlot = null;
 
-  // Update the available appointments after setting the confirmation.
-    const bookedAppointmentId = result.appointment?._id || result._id;
+      // Update the available appointments after setting the confirmation.
+      const bookedAppointmentId = result.appointment?._id || result._id;
 
-    this.allSlots = this.allSlots.filter(
-    slot => slot._id !== bookedAppointmentId
-  );
+      this.allSlots = this.allSlots.filter(
+        slot => slot._id !== bookedAppointmentId
+      );
 
-  this.updateCalendar();
-  this.updateFilteredSlots();
-      
+      this.updateCalendar();
+      this.updateFilteredSlots();
+
     } catch (error: unknown) {
       this.bookingStatus =
         error instanceof Error
@@ -275,17 +275,23 @@ export class BookingPageComponent implements OnInit {
   }
 
   getDateKey(dateValue: string): string {
-    const date = new Date(dateValue);
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Chicago',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(new Date(dateValue));
 
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const values = Object.fromEntries(
+      parts.map(part => [part.type, part.value])
+    );
 
-    return `${year}-${month}-${day}`;
+    return `${values['year']}-${values['month']}-${values['day']}`;
   }
 
   formatTime(dateValue: string): string {
-    return new Date(dateValue).toLocaleTimeString([], {
+    return new Date(dateValue).toLocaleTimeString('en-US', {
+      timeZone: 'America/Chicago',
       hour: 'numeric',
       minute: '2-digit',
     });
