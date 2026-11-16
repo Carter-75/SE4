@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const passport = require('passport');
 const router = express.Router();
 const User = require('../models/user');
@@ -166,13 +167,31 @@ router.post('/register', async (req, res) => {
 
 // --- Local Login ---
 router.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
+  passport.authenticate('local', async (err, user, info) => {
     if (err) return next(err);
 
     if (!user) {
       return res.status(401).json({
         message: info?.message || 'Login failed'
       });
+    }
+
+    try {
+      const existingSession = await mongoose.connection
+        .collection('sessions')
+        .findOne({
+          _id: { $ne: req.sessionID },
+          expires: { $gt: new Date() },
+          session: { $regex: `"user":"${user.id}"` }
+        });
+
+      if (existingSession) {
+        return res.status(401).json({
+          message: 'This account is already logged in.'
+        });
+      }
+    } catch (sessionError) {
+      return next(sessionError);
     }
 
     req.login(user, (err) => {
