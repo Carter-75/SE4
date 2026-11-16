@@ -179,6 +179,7 @@ router.post(
   }
 );
 
+// Use in View Appointments code
 router.get('/mine', requireLogin, async (req, res, next) => {
   try {
     const appointments = await Appointment.find({
@@ -296,6 +297,7 @@ router.post(
   }
 );
 
+// Unbook button: use in View Appointments code
 router.post('/:id/unbook', requireLogin, async (req, res, next) => {
   try {
     const appointment = await Appointment.findOne({
@@ -330,6 +332,7 @@ router.post('/:id/unbook', requireLogin, async (req, res, next) => {
   }
 });
 
+// Cancel button: use in View Appointments code
 router.post('/:id/cancel', requireLogin, async (req, res, next) => {
   try {
     const appointment = await Appointment.findOne({
