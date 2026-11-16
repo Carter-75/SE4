@@ -12,6 +12,7 @@ function publicUser(user) {
     lastN: user.lastN,
     username: user.username,
     type: user.type,
+    serviceType: user.serviceType,
     active: user.active
   };
 }
@@ -48,30 +49,30 @@ router.post('/register', async (req, res) => {
     const normalizedLastN = lastN.trim();
 
     if (
-  typeof dob !== 'string' ||
-  !/^\d{4}-\d{2}-\d{2}$/.test(dob)
-  ) {
-    return res.status(400).json({
-    message: 'Please provide a valid date of birth that is not in the future.'
-    });
-  }
+      typeof dob !== 'string' ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(dob)
+    ) {
+      return res.status(400).json({
+        message: 'Please provide a valid date of birth that is not in the future.'
+      });
+    }
 
-  const [year, month, day] = dob.split('-').map(Number);
-  const dobDate = new Date(Date.UTC(year, month - 1, day));
+    const [year, month, day] = dob.split('-').map(Number);
+    const dobDate = new Date(Date.UTC(year, month - 1, day));
 
-  const today = new Date();
-  today.setUTCHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
 
-  if (
-    dobDate.getUTCFullYear() !== year ||
-    dobDate.getUTCMonth() !== month - 1 ||
-    dobDate.getUTCDate() !== day ||
-    dobDate > today
-  ) {
-    return res.status(400).json({
-    message: 'Please provide a valid date of birth that is not in the future.'
-    });
-  }
+    if (
+      dobDate.getUTCFullYear() !== year ||
+      dobDate.getUTCMonth() !== month - 1 ||
+      dobDate.getUTCDate() !== day ||
+      dobDate > today
+    ) {
+      return res.status(400).json({
+        message: 'Please provide a valid date of birth that is not in the future.'
+      });
+    }
     // Only allow customer or provider registration publicly.
     const accountType = type || 'customer';
 

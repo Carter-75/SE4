@@ -16,6 +16,7 @@ export class AvailabilityPageComponent implements OnInit {
   slotStatus = '';
   slotError = false;
   today = '';
+  providerServiceType = '';
 
   constructor() {
     inject(Title).setTitle('Set availability');
@@ -40,6 +41,12 @@ export class AvailabilityPageComponent implements OnInit {
 
         if (user.type === 'customer') {
           await this.router.navigate(['/customer']);
+        }
+        if (user.type === 'provider') {
+          this.providerServiceType = Array.isArray(user.serviceType)
+            ? user.serviceType[0] || ''
+            : user.serviceType || '';
+          this.cdr.detectChanges();
         }
       }
     } catch {

@@ -106,6 +106,20 @@ router.post(
         });
       }
 
+      // Verify the provider is creating an appointment for their registered service type.
+      const registeredServiceTypes = req.user.serviceType;
+
+      if (
+        !Array.isArray(registeredServiceTypes) ||
+        !registeredServiceTypes.some(
+          type => typeof type === 'string' &&
+            type.toLowerCase() === category
+        )
+      ) {
+        return res.status(403).json({
+          message: 'You can only create appointments for your registered service type.'
+        });
+      }
       // Combine the selected date and times.
       const start = centralTimeToUTC(date, startTime);
       const end = centralTimeToUTC(date, endTime);
