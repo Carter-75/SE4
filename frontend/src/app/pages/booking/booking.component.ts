@@ -50,6 +50,7 @@ export class BookingPageComponent implements OnInit {
 
   isBooking = false;
   bookingStatus = '';
+  bookingError = false;
   bookingSummary = '';
 
   constructor() {
@@ -226,6 +227,7 @@ export class BookingPageComponent implements OnInit {
     }
 
     this.isBooking = true;
+    this.bookingError = false;
     this.bookingStatus = 'Confirming your appointment...';
 
     try {
@@ -249,6 +251,7 @@ export class BookingPageComponent implements OnInit {
       }
 
       this.bookingStatus = result.message || 'Appointment booked successfully!';
+      this.bookingError = false;
       this.bookingSummary = '';
       this.selectedSlotId = '';
       this.selectedSlot = null;
@@ -268,6 +271,7 @@ export class BookingPageComponent implements OnInit {
         error instanceof Error
           ? error.message
           : 'Unable to book this appointment.';
+      this.bookingError = true;
     } finally {
       this.isBooking = false;
       this.cdr.detectChanges();
