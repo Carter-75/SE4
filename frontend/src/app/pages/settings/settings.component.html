@@ -1,5 +1,17 @@
 <main class="settings-page">
-  <button type="button" routerLink="/customer">Customer view</button>
-  <button type="button" routerLink="/provider" *ngIf="isProvider">Provider view</button>
+  <app-back-button [fallback]="backFallback"></app-back-button>
+  <button type="button" routerLink="/customer" *ngIf="isProvider && !fromCustomer">Customer view</button>
+  <button type="button" routerLink="/provider" *ngIf="isProvider && fromCustomer">Provider view</button>
   <button type="button" (click)="logout()">Logout</button>
+  <section class="notifications">
+    <h2>Notifications</h2>
+    <p *ngIf="notifications.length === 0">No notifications.</p>
+    <button type="button" *ngIf="hasUnread" (click)="markAllRead()">Mark all read</button>
+    <ul class="notifications-list">
+      <li *ngFor="let notification of notifications" [class.unread]="!notification.read" (click)="markRead(notification)">
+        <span class="notification-message">{{ notification.message }}</span>
+        <span class="notification-time">{{ formatSent(notification.timeSent) }}</span>
+      </li>
+    </ul>
+  </section>
 </main>

@@ -1,18 +1,22 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { BackButtonComponent } from '../../components/back-button/back-button.component';
 
 @Component({
   selector: 'app-availability-page',
   standalone: true,
-  imports: [],
+  imports: [BackButtonComponent],
   templateUrl: './availability.component.html',
 })
 
 export class AvailabilityPageComponent implements OnInit {
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
   slotStatus = '';
-  today ='';
+  slotError = false;
+  today = '';
+  providerServiceType = '';
 
   constructor() {
     inject(Title).setTitle('Set availability');
@@ -21,8 +25,8 @@ export class AvailabilityPageComponent implements OnInit {
 
     this.today = [
       now.getFullYear(),
-      String(now.getMonth() + 1).padStart(2,'0'),
-      String(now.getDate()).padStart(2,'0'),
+      String(now.getMonth() + 1).padStart(2, '0'),
+      String(now.getDate()).padStart(2, '0'),
     ].join('-');
   }
 
@@ -38,6 +42,12 @@ export class AvailabilityPageComponent implements OnInit {
         if (user.type === 'customer') {
           await this.router.navigate(['/customer']);
         }
+        if (user.type === 'provider') {
+          this.providerServiceType = Array.isArray(user.serviceType)
+            ? user.serviceType[0] || ''
+            : user.serviceType || '';
+          this.cdr.detectChanges();
+        }
       }
     } catch {
     }
@@ -51,7 +61,7 @@ export class AvailabilityPageComponent implements OnInit {
 
     const serviceType = String(formData.get('serviceType') ?? '');
     const appointmentTitle = String(
-    formData.get('appointmentTitle') ?? ''
+      formData.get('appointmentTitle') ?? ''
     ).trim();
     const date = String(formData.get('date') ?? '');
     const startTime = String(formData.get('startTime') ?? '');
@@ -59,14 +69,15 @@ export class AvailabilityPageComponent implements OnInit {
 
     if (!serviceType || !appointmentTitle || !date || !startTime || !endTime) {
       this.slotStatus = 'Please fill in all required fields.';
-    return;
-   }
-   if (endTime <= startTime) {
+      return;
+    }
+    if (endTime <= startTime) {
       this.slotStatus = 'End time must be later than start time.';
       return;
     }
 
-  this.slotStatus = 'Creating appointment slot...';
+    this.slotError = false;
+    this.slotStatus = 'Creating appointment slot...';
 
     try {
       const response = await fetch('/api/appointments/slots', {
@@ -88,15 +99,20 @@ export class AvailabilityPageComponent implements OnInit {
 
       if (!response.ok) {
         throw new Error(result.message || 'Could not create appointment slot.');
+        this.slotError = true;
       }
 
       this.slotStatus = result.message || 'Appointment slot created successfully!';
+      this.slotError = false;
       form.reset();
     } catch (error: unknown) {
       this.slotStatus =
         error instanceof Error
           ? error.message
           : 'Could not create appointment slot.';
+      this.slotError = true;
+    } finally {
+      this.cdr.detectChanges();
     }
   }
 }

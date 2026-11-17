@@ -8,3 +8,4 @@ dist/
 
 delete-project.py
 READ THIS TEAM.txt
+__pycache__/

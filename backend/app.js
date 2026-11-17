@@ -136,17 +136,12 @@ app.use(helmet({
 }));
 
 app.use(cors({
-  origin: true,
+  origin: isProd ? prodUrl || false : true,
   credentials: true
 }));
 
 // Apply DB check to all /api routes
 app.use('/api', dbCheck);
-
-app.use(cors({
-  origin: true,
-  credentials: true
-}));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -187,6 +182,7 @@ app.use('/api/auth', authRouter);
 app.use('/auth', authRouter);
 
 app.use('/api/appointments', require('./routes/appointments'));
+app.use('/api/notifications', require('./routes/notifications'));
 
 // Error handler
 app.use((err, req, res, next) => {
