@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications</title>
+
+  <link rel="stylesheet" href="notifications.css">
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- All notifications -->
+    <main class="notifications">
+
+      <section aria-labelledby="notificationsHeading">
+        <h1 id="notificationsHeading">Notifications</h1>
+        <hr class="section-line">
+
+        <!-- Search bar -->
+        <search class="searchbar">
+            <input
+                type="search"
+                class="search"
+                id="searchInput"
+                placeholder="Search notifications... (this function is not implemented yet)"
+                aria-label="Search notifications"
+            >
+        </search>
+
+        <!-- List of notifications, most recent notification at the top -->
+        <ul class="notification-list" id="notificationsList"></ul>
+      </section>
+    </main>   
+  </div>
+
+  <script>
+    /*
+    
+    // Backend endpoints
+    const API_URL = "/api/appointments";
+
+    // Appointment data is populated by the backend.
+    let appointments = [];
+    let loading = true;
+    let loadError = "";
+
+    const upcomingList = document.getElementById("upcomingList");
+    const pastList = document.getElementById("pastList");
+    const searchInput = document.getElementById("searchInput");
+    const sortSelect = document.getElementById("sortSelect");
+
+    // Convert an appointment's date and time into a timestamp.
+    function appointmentTimestamp(appointment) {
+      const dateTime = new Date(
+        appointment.date + "T" + (appointment.time || "00:00")
+      );
+
+      return dateTime.getTime();
+    }
+
+    // Determine whether an appointment is upcoming, past, or cancelled.
+    function getAppointmentStatus(appointment) {
+      if (
+        appointment.status === "cancelled" ||
+        appointment.status === "canceled"
+      ) {
+        return "cancelled";
+      }
+
+      const timestamp = appointmentTimestamp(appointment);
+
+      if (!Number.isFinite(timestamp)) {
+        return "invalid";
+      }
+
+      return timestamp > Date.now() ? "upcoming" : "past";
+    }
+
+    function formatDate(dateString) {
+      const date = new Date(dateString + "T12:00:00");
+
+      if (Number.isNaN(date.getTime())) {
+        return dateString;
+      }
+
+      return date.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+      });
+    }
+
+    function showMessage(container, message, isError = false) {
+      const paragraph = document.createElement("p");
+
+      paragraph.className = isError
+        ? "empty-message error-message"
+        : "empty-message";
+
+      paragraph.textContent = message;
+      container.appendChild(paragraph);
+    }
+
+    // Retrieve appointments belonging to the signed-in user.
+    async function loadAppointments() {
+      loading = true;
+      loadError = "";
+      renderAppointments();
+
+      try {
+        const response = await fetch(API_URL, {
+          credentials: "same-origin"
+        });
+
+        if (!response.ok) {
+          throw new Error("Unable to load appointments");
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data)) {
+          throw new Error("Invalid appointment data");
+        }
+
+        appointments = data;
+      } catch (error) {
+        console.error(error);
+        appointments = [];
+        loadError = "Could not load appointments.";
+      } finally {
+        loading = false;
+        renderAppointments();
+      }
+    }
+
+    // Build a card using appointment information from the backend.
+    function createAppointmentCard(appointment) {
+      const card = document.createElement("article");
+      card.className = "appointment-card";
+
+      const icon = document.createElement("div");
+      icon.className = "appointment-icon";
+      icon.setAttribute("aria-hidden", "true");
+
+      const icons = {
+        Beauty: "✂",
+        Medical: "✚",
+        Fitness: "●"
+      };
+
+      icon.textContent = icons[appointment.category] || "◯";
+
+      const info = document.createElement("div");
+      info.className = "appointment-info";
+
+      const title = document.createElement("h2");
+      title.textContent = appointment.name || "Appointment";
+
+      const provider = document.createElement("p");
+      provider.textContent = appointment.provider || "";
+
+      const date = document.createElement("p");
+      date.textContent =
+        formatDate(appointment.date) +
+        (appointment.time ? " • " + appointment.time : "");
+
+      const category = document.createElement("p");
+      category.className = "appointment-category";
+      category.textContent = appointment.category || "";
+
+      info.append(title, provider, date, category);
+      card.append(icon, info);
+
+      if (getAppointmentStatus(appointment) === "upcoming") {
+        const cancelButton = document.createElement("button");
+
+        cancelButton.className = "cancel-btn";
+        cancelButton.textContent = "Cancel";
+
+        cancelButton.addEventListener("click", () => {
+          cancelAppointment(appointment.id, cancelButton);
+        });
+
+        card.appendChild(cancelButton);
+      }
+
+      return card;
+    }
+
+    // Request cancellation from the backend.
+    async function cancelAppointment(id, button) {
+      if (!confirm("Are you sure you want to cancel this appointment?")) {
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Cancelling...";
+
+      try {
+        const response = await fetch(
+          API_URL + "/" + encodeURIComponent(id) + "/cancel",
+          {
+            method: "PATCH",
+            credentials: "same-origin"
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Cancellation failed");
+        }
+
+        await loadAppointments();
+      } catch (error) {
+        console.error(error);
+        alert("Unable to cancel the appointment. Please try again.");
+
+        button.disabled = false;
+        button.textContent = "Cancel";
+      }
+    }
+
+    // Apply search, category selection, and sorting.
+    function renderAppointments() {
+      upcomingList.replaceChildren();
+      pastList.replaceChildren();
+
+      if (loading) {
+        showMessage(upcomingList, "Loading appointments...");
+        showMessage(pastList, "Loading appointments...");
+        return;
+      }
+
+      if (loadError) {
+        showMessage(upcomingList, loadError, true);
+        showMessage(pastList, loadError, true);
+        return;
+      }
+
+      const searchText = searchInput.value.trim().toLowerCase();
+
+      const selectedCategory = document.querySelector(
+        'input[name="category"]:checked'
+      ).value;
+
+      const sortOption = sortSelect.value;
+
+      const filtered = appointments.filter(appointment => {
+        const status = getAppointmentStatus(appointment);
+
+        if (status === "cancelled" || status === "invalid") {
+          return false;
+        }
+
+        const searchableText = [
+          appointment.name,
+          appointment.provider,
+          appointment.category
+        ].filter(Boolean).join(" ").toLowerCase();
+
+        const matchesSearch = searchableText.includes(searchText);
+
+        const matchesCategory =
+          selectedCategory === "all" ||
+          (appointment.category || "").toLowerCase() ===
+            selectedCategory.toLowerCase();
+
+        return matchesSearch && matchesCategory;
+      });
+
+      const upcoming = filtered.filter(
+        appointment => getAppointmentStatus(appointment) === "upcoming"
+      );
+
+      const past = filtered.filter(
+        appointment => getAppointmentStatus(appointment) === "past"
+      );
+
+      function sortAppointments(list, section) {
+        list.sort((a, b) => {
+          if (sortOption === "az") {
+            return (a.name || "").localeCompare(b.name || "");
+          }
+
+          if (sortOption === "za") {
+            return (b.name || "").localeCompare(a.name || "");
+          }
+
+          if (sortOption === "newest") {
+            return appointmentTimestamp(b) - appointmentTimestamp(a);
+          }
+
+          if (sortOption === "oldest") {
+            return appointmentTimestamp(a) - appointmentTimestamp(b);
+          }
+
+          // Default: nearest upcoming or most recent past appointment.
+          return section === "upcoming"
+            ? appointmentTimestamp(a) - appointmentTimestamp(b)
+            : appointmentTimestamp(b) - appointmentTimestamp(a);
+        });
+      }
+
+      sortAppointments(upcoming, "upcoming");
+      sortAppointments(past, "past");
+
+      upcoming.forEach(appointment => {
+        upcomingList.appendChild(createAppointmentCard(appointment));
+      });
+
+      past.forEach(appointment => {
+        pastList.appendChild(createAppointmentCard(appointment));
+      });
+
+      if (upcoming.length === 0) {
+        showMessage(upcomingList, "No upcoming appointments.");
+      }
+
+      if (past.length === 0) {
+        showMessage(pastList, "No past appointments.");
+      }
+    }
+
+    // Page interactions
+    searchInput.addEventListener("input", renderAppointments);
+    sortSelect.addEventListener("change", renderAppointments);
+
+    document.querySelectorAll('input[name="category"]').forEach(radio => {
+      radio.addEventListener("change", renderAppointments);
+    });
+
+    // Recheck appointment dates while the page remains open.
+    setInterval(renderAppointments, 60000);
+
+    // Initial appointment request
+    loadAppointments();
+    */
+  </script>
+
+</body>
+</html>
