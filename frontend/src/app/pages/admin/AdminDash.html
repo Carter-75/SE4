@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #ffb65c;
+        }
+
+        .dashboard {
+            width: 100%;
+            max-width: 1440px;
+            min-height: 1024px;
+            margin: auto;
+            position: relative;
+            background-color: #ffb65c;
+        }
+
+        .dashboard-button {
+            position: absolute;
+            width: 302px;
+            border: none;
+            padding: 0;
+            background: transparent;
+            cursor: pointer;
+            text-align: center;
+            font-family: inherit;
+            font-size: 30px;
+            color: black;
+        }
+
+        .icon-circle {
+            width: 302px;
+            height: 302px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s ease;
+        }
+
+        .icon-circle svg {
+            width: 140px;
+            height: 140px;
+            stroke: #222;
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .dashboard-button:hover .icon-circle {
+            transform: scale(1.05);
+        }
+
+        .dashboard-button:active .icon-circle {
+            transform: scale(0.97);
+        }
+
+        .dashboard-button span {
+            display: block;
+            margin-top: 18px;
+            white-space: nowrap;
+        }
+
+        .user-control {
+            top: 105px;
+            left: 103px;
+        }
+
+        .account-settings {
+            top: 541px;
+            left: 103px;
+        }
+
+        .appointment-hub {
+            top: 105px;
+            left: 566px;
+        }
+
+        .appointment-statistics {
+            top: 105px;
+            left: 1028px;
+        }
+
+        @media (max-width: 1100px) {
+            .dashboard {
+                min-height: 100vh;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 60px 30px;
+                padding: 60px 30px;
+                justify-items: center;
+            }
+
+            .dashboard-button {
+                position: static;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="dashboard">
+
+        <!-- User Control -->
+        <button class="dashboard-button user-control" type="button">
+            <div class="icon-circle">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="8" r="4"/>
+                    <path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
+                </svg>
+            </div>
+            <span>User control!</span>
+        </button>
+
+        <!-- Account Settings -->
+        <button class="dashboard-button account-settings" type="button">
+            <div class="icon-circle">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+                    <path d="M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>
+                </svg>
+            </div>
+            <span>Account settings!</span>
+        </button>
+
+        <!-- Appointment Hub -->
+        <button class="dashboard-button appointment-hub" type="button">
+            <div class="icon-circle">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="5" width="18" height="16" rx="2"/>
+                    <path d="M7 2v6M17 2v6M3 10h18"/>
+                    <path d="m9 16 2 2 4-4"/>
+                </svg>
+            </div>
+            <span>Appointment Hub</span>
+        </button>
+
+        <!-- Appointment Statistics -->
+        <button class="dashboard-button appointment-statistics" type="button">
+            <div class="icon-circle">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 21h18"/>
+                    <rect x="5" y="12" width="3" height="9"/>
+                    <rect x="11" y="7" width="3" height="14"/>
+                    <rect x="17" y="3" width="3" height="18"/>
+                </svg>
+            </div>
+            <span>Appointment Statistics!</span>
+        </button>
+
+    </main>
+</body>
+</html>

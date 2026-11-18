@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - View Appointments</title>
+
+    <link rel="stylesheet" href="adminViewApp.css">
+</head>
+
+<body>
+
+<main class="appointments-page">
+
+    <!-- Search by customer or provider -->
+    <div class="search-container">
+        <input
+            type="search"
+            id="appointmentSearch"
+            placeholder="Search by name or provider..."
+            aria-label="Search by customer or provider"
+        >
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+
+        <!-- Date filter -->
+        <div class="filter-group">
+            <div class="filter-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="5" width="18" height="16" rx="2"/>
+                    <path d="M7 2v6M17 2v6M3 10h18"/>
+                </svg>
+            </div>
+
+            <input
+                type="date"
+                id="dateFilter"
+                aria-label="Filter by date"
+            >
+        </div>
+
+        <!-- Service filter -->
+        <div class="filter-group">
+            <div class="filter-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 7h16M4 12h16M4 17h16"/>
+                </svg>
+            </div>
+
+            <select id="serviceFilter" aria-label="Filter by service">
+                <option value="all">All Services</option>
+                <option value="Service 1">Beauty</option>
+                <option value="Service 2">Fitness</option>
+                <option value="Service 3">Medical</option>
+            </select>
+        </div>
+
+    </div>
+
+    <!-- Appointments -->
+    <div class="appointments-grid" id="appointmentsGrid"></div>
+
+</main>
+
+<script>
+    // Empty until connected to the database.
+    let appointments = [];
+
+    const searchInput = document.getElementById("appointmentSearch");
+    const serviceFilter = document.getElementById("serviceFilter");
+    const dateFilter = document.getElementById("dateFilter");
+    const appointmentsGrid = document.getElementById("appointmentsGrid");
+
+    function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, char => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        })[char]);
+    }
+
+    function renderAppointments() {
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        const selectedService = serviceFilter.value;
+        const selectedDate = dateFilter.value;
+
+        const filteredAppointments = appointments.filter(appointment => {
+            const customerName = String(
+                appointment.customerName ?? ""
+            ).toLowerCase();
+
+            const providerName = String(
+                appointment.providerName ?? ""
+            ).toLowerCase();
+
+            const matchesSearch =
+                customerName.includes(searchTerm) ||
+                providerName.includes(searchTerm);
+
+            const matchesService =
+                selectedService === "all" ||
+                appointment.serviceName === selectedService;
+
+            const matchesDate =
+                !selectedDate ||
+                appointment.date === selectedDate;
+
+            return matchesSearch && matchesService && matchesDate;
+        });
+
+        appointmentsGrid.innerHTML = "";
+
+        if (filteredAppointments.length === 0) {
+            appointmentsGrid.innerHTML = `
+                <div class="empty-state">
+                    <h2>No appointments to display</h2>
+                    <p>Appointments will appear here when available.</p>
+                </div>
+            `;
+            return;
+        }
+
+        filteredAppointments.forEach(appointment => {
+            const appointmentElement = document.createElement("div");
+            appointmentElement.className = "appointment";
+
+            appointmentElement.innerHTML = `
+                <div class="profile-circle">
+                    <svg width="54" height="54" viewBox="0 0 24 24"
+                         fill="none" stroke="#777" stroke-width="1.5">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
+                    </svg>
+                </div>
+
+                <div class="appointment-info">
+                    <div class="appointment-details">
+                        <strong>${escapeHTML(appointment.customerName)}</strong>
+                        <span>Provider: ${escapeHTML(appointment.providerName)}</span>
+                        <span>
+                            ${escapeHTML(appointment.serviceName)} |
+                            ${escapeHTML(appointment.date)} |
+                            ${escapeHTML(appointment.time)}
+                        </span>
+                    </div>
+
+                    <button class="cancel-button" type="button">
+                        Cancel
+                    </button>
+                </div>
+            `;
+
+            appointmentsGrid.appendChild(appointmentElement);
+        });
+    }
+
+    // Search and filter events
+    searchInput.addEventListener("input", renderAppointments);
+    serviceFilter.addEventListener("change", renderAppointments);
+    dateFilter.addEventListener("change", renderAppointments);
+
+    // Display empty state initially
+    renderAppointments();
+
+    // Future database connection:
+    // appointments = responseData;
+    // renderAppointments();
+</script>
+
+</body>
+</html>
