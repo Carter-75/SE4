@@ -294,6 +294,7 @@ body { margin:0; }
 .appointment-info h3 { font-size:26px; font-weight:400; margin:0 0 8px; }
 .appointment-info p { font-size:20px; margin:4px 0; }
 .unbook-btn { background:rgb(66,133,204); border:0; padding:12px 18px; font:20px Inter,serif; color:black; cursor:pointer; }
+.cancel-btn { background:rgb(66,133,204); border:0; padding:12px 18px; font:20px Inter,serif; color:black; cursor:pointer; }
 .appointments-sidebar { border-left:1px solid black; padding-left:30px; }
 .appointments-sidebar .search { width:100%; box-sizing:border-box; padding:12px; font:22px Inter,serif; background:#d9d9d9; border:0; margin-bottom:24px; }
 .appointments-sidebar select { width:100%; box-sizing:border-box; padding:12px; font:22px Inter,serif; background:#d9d9d9; border:0; }

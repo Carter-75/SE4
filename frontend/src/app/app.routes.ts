@@ -7,6 +7,7 @@ import { CustomerPageComponent } from './pages/customer/customer.component';
 import { ProviderPageComponent } from './pages/provider/provider.component';
 import { SettingsPageComponent } from './pages/settings/settings.component';
 import { AppointmentsPageComponent } from './pages/appointments/appointments.component';
+import { ProviderAppointmentsPageComponent } from './pages/provider-appointments/provider-appointments.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'provider', component: ProviderPageComponent },
   { path: 'settings', component: SettingsPageComponent },
   { path: 'appointments', component: AppointmentsPageComponent },
+  { path: 'provider-appointments', component: ProviderAppointmentsPageComponent },
   { path: '**', redirectTo: 'login' },
 ];

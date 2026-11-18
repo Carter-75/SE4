@@ -1,0 +1,97 @@
+<main class="appointments-page">
+  <app-back-button fallback="/provider"></app-back-button>
+
+  <h1>View Your Appointments</h1>
+
+  <div class="appointments-layout">
+    <div class="appointments-main">
+      <section aria-labelledby="upcomingHeading">
+        <h2 id="upcomingHeading">Upcoming</h2>
+        <hr class="section-line">
+
+        <p class="empty-message" *ngIf="loading">Loading appointments...</p>
+        <p class="empty-message error-message" *ngIf="!loading && loadError">{{ loadError }}</p>
+
+        <ng-container *ngIf="!loading && !loadError">
+          <p class="empty-message" *ngIf="upcoming.length === 0">No upcoming appointments.</p>
+
+          <article class="appointment-card" *ngFor="let appointment of upcoming">
+            <div class="appointment-info">
+              <h3>{{ appointment.title }}</h3>
+              <p>{{ appointment.customerName }}</p>
+              <p>{{ appointment.dateLabel }}</p>
+              <p class="appointment-category">{{ appointment.categoryLabel }}</p>
+            </div>
+            <button class="cancel-btn" type="button" (click)="cancel(appointment)">Cancel</button>
+          </article>
+        </ng-container>
+      </section>
+
+      <section aria-labelledby="pastHeading">
+        <h2 id="pastHeading">Past</h2>
+        <hr class="section-line">
+
+        <p class="empty-message" *ngIf="loading">Loading appointments...</p>
+        <p class="empty-message error-message" *ngIf="!loading && loadError">{{ loadError }}</p>
+
+        <ng-container *ngIf="!loading && !loadError">
+          <p class="empty-message" *ngIf="past.length === 0">No past appointments.</p>
+
+          <article class="appointment-card" *ngFor="let appointment of past">
+            <div class="appointment-info">
+              <h3>{{ appointment.title }}</h3>
+              <p>{{ appointment.customerName }}</p>
+              <p>{{ appointment.dateLabel }}</p>
+              <p class="appointment-category">{{ appointment.categoryLabel }}</p>
+            </div>
+          </article>
+        </ng-container>
+      </section>
+
+      <p id="appointments-status" role="status" *ngIf="statusMessage">{{ statusMessage }}</p>
+    </div>
+
+    <aside class="appointments-sidebar">
+      <input
+        type="search"
+        class="search"
+        placeholder="Search appointments..."
+        aria-label="Search appointments"
+        [value]="searchText"
+        (input)="onSearch($event)"
+      >
+
+      <select aria-label="Sort appointments" [value]="sortOption" (change)="onSort($event)">
+        <option value="default">Sort</option>
+        <option value="az">Alphabetical (A-Z)</option>
+        <option value="za">Alphabetical (Z-A)</option>
+        <option value="newest">Most Recent First</option>
+        <option value="oldest">Oldest First</option>
+      </select>
+
+      <h2 class="category-heading">Appointment Type</h2>
+
+      <div class="categories" role="group" aria-label="Appointment category">
+        <label class="category-option">
+          <input type="radio" name="category" value="all" [checked]="category === 'all'" (change)="onCategory('all')">
+          <span>All</span>
+        </label>
+
+        <label class="category-option">
+          <input type="radio" name="category" value="beauty" [checked]="category === 'beauty'" (change)="onCategory('beauty')">
+          <span>Beauty</span>
+        </label>
+
+        <label class="category-option">
+          <input type="radio" name="category" value="medical" [checked]="category === 'medical'" (change)="onCategory('medical')">
+          <span>Medical</span>
+        </label>
+
+        <label class="category-option">
+          <input type="radio" name="category" value="fitness" [checked]="category === 'fitness'" (change)="onCategory('fitness')">
+          <span>Fitness</span>
+        </label>
+      </div>
+    </aside>
+  </div>
+</main>
