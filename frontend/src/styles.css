@@ -284,6 +284,30 @@ body { margin:0; }
   overflow-wrap: anywhere;
 }
 
+.appointments-page { width:100%; min-height:100vh; box-sizing:border-box; background:rgb(136,196,252); padding:42px 64px; font-family:Inter,serif; color:black; }
+.appointments-page h1 { text-align:center; font-size:clamp(36px,5vw,64px); font-weight:400; margin:0 0 40px; }
+.appointments-layout { display:grid; grid-template-columns:minmax(0,2fr) minmax(280px,1fr); gap:24px; }
+.appointments-main section { margin-bottom:40px; }
+.appointments-main h2 { font-size:40px; font-weight:400; margin:0 0 8px; }
+.appointments-page .section-line { border:0; border-top:1px solid black; margin:0 0 16px; }
+.appointment-card { display:flex; justify-content:space-between; align-items:center; gap:16px; background:#d9d9d9; padding:20px; margin:16px 0; }
+.appointment-info h3 { font-size:26px; font-weight:400; margin:0 0 8px; }
+.appointment-info p { font-size:20px; margin:4px 0; }
+.unbook-btn { background:rgb(66,133,204); border:0; padding:12px 18px; font:20px Inter,serif; color:black; cursor:pointer; }
+.appointments-sidebar { border-left:1px solid black; padding-left:30px; }
+.appointments-sidebar .search { width:100%; box-sizing:border-box; padding:12px; font:22px Inter,serif; background:#d9d9d9; border:0; margin-bottom:24px; }
+.appointments-sidebar select { width:100%; box-sizing:border-box; padding:12px; font:22px Inter,serif; background:#d9d9d9; border:0; }
+.appointments-sidebar .category-heading { font-size:28px; font-weight:400; margin:32px 0 16px; }
+.appointments-sidebar .category-option { display:flex; align-items:center; gap:10px; font-size:22px; margin-bottom:12px; cursor:pointer; }
+.appointments-sidebar .category-option input { width:22px; height:22px; }
+.appointments-page .empty-message { font-size:20px; }
+.appointments-page .error-message { color:#b00020; }
+#appointments-status { font-size:20px; margin-top:18px; }
+@media (max-width:900px) {
+  .appointments-page { padding:20px; }
+  .appointments-layout { grid-template-columns:1fr; }
+  .appointments-sidebar { grid-row:1; border-left:0; border-bottom:1px solid black; padding:0 0 24px; }
+}
 .settings-page { display: flex; gap: 16px; padding: 24px; flex-wrap: wrap; }
 .settings-page button { padding: 12px 20px; cursor: pointer; }
 .settings-page .notifications { flex-basis: 100%; }
