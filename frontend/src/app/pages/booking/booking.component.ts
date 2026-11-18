@@ -42,6 +42,7 @@ export class BookingPageComponent implements OnInit {
   selectedMonth = '';
   selectedDate = '';
   selectedSlotId = '';
+  providerSearch = '';
 
   selectedSlot: AppointmentSlot | null = null;
 
@@ -159,7 +160,8 @@ export class BookingPageComponent implements OnInit {
         return (
           slot.category?.toLowerCase() === this.selectedService &&
           this.getDateKey(slot.startTime) === dateKey &&
-          new Date(slot.startTime).getTime() > Date.now()
+          new Date(slot.startTime).getTime() > Date.now() &&
+          this.matchesProviderSearch(slot)
         );
       });
 
@@ -183,18 +185,29 @@ export class BookingPageComponent implements OnInit {
       const isFuture =
         new Date(slot.startTime).getTime() > Date.now();
 
-      return matchesService && matchesDate && isFuture;
+      const matchesProvider =
+        this.matchesProviderSearch(slot);
+
+      return (
+        matchesService &&
+        matchesDate &&
+        isFuture &&
+        matchesProvider
+      );
     });
 
     if (
       this.selectedSlotId &&
-      !this.filteredSlots.some((slot) => slot._id === this.selectedSlotId)
+      !this.filteredSlots.some(
+        (slot) => slot._id === this.selectedSlotId
+      )
     ) {
       this.selectedSlotId = '';
       this.selectedSlot = null;
       this.bookingSummary = '';
     }
   }
+
 
   selectDate(dateKey: string): void {
     this.selectedDate = dateKey;
@@ -300,4 +313,33 @@ export class BookingPageComponent implements OnInit {
       minute: '2-digit',
     });
   }
+
+  onProviderSearch(event: Event): void {
+    this.providerSearch = (event.target as HTMLInputElement).value;
+
+    this.updateCalendar();
+    this.updateFilteredSlots();
+  }
+
+  private matchesProviderSearch(slot: AppointmentSlot): boolean {
+    const search = this.providerSearch.trim().toLowerCase();
+
+    if (!search) {
+      return true;
+    }
+
+    const firstName = slot.provider?.firstN || '';
+    const lastName = slot.provider?.lastN || '';
+    const username = slot.provider?.username || '';
+
+    const fullName = `${firstName} ${lastName}`.trim().toLowerCase();
+
+    return (
+      fullName.includes(search) ||
+      firstName.toLowerCase().includes(search) ||
+      lastName.toLowerCase().includes(search) ||
+      username.toLowerCase().includes(search)
+    );
+  }
+
 }

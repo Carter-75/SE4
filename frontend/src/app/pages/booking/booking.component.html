@@ -67,6 +67,15 @@
               </g>
             </svg></span><span>Fitness</span></label>
       </fieldset>
+      <!-- Search Providers -->
+      <div class="provider-search">
+        <label for="provider-search-input">
+          Search Providers by Name
+        </label>
+
+        <input id="provider-search-input" type="search" placeholder="Enter provider name..." [value]="providerSearch"
+          (input)="onProviderSearch($event)" autocomplete="off" />
+      </div>
 
       <h2>Available appointments</h2>
       <p *ngIf="isLoadingAppointments" role="status">Loading available appointments...</p>
