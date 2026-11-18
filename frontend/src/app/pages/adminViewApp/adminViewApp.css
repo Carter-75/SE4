@@ -9,12 +9,15 @@ body {
     color: black;
 }
 
+
 .appointments-page {
-    max-width: 1440px;
+    width: 100%;
     min-height: 1024px;
-    margin: 0 auto;
+    margin: 0;
     padding: 65px 26px;
+    background-color: #ffb65c;
 }
+
 
 /* Search bar */
 
@@ -217,4 +220,122 @@ body {
     .cancel-button {
         font-size: 17px;
     }
+}
+
+/* Admin Appointment Hub Header */
+
+.dashboard-header-wrapper {
+    background-color: #ffb65c;
+    padding: 12px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    background-color: #ffb65c;
+    border: 3px solid black;
+    border-radius: 8px;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 70px;
+}
+
+.dashboard-header h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.dashboard-user-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Header left section */
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+/* Back to Dashboard button */
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    background-color: #ffffff;
+    color: #000000;
+    border: 2px solid black;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #e5e5e5;
+}
+
+.back-button:active {
+    transform: scale(0.97);
+}
+
+.back-button:focus-visible {
+    outline: 3px solid #1f2937;
+    outline-offset: 3px;
+}
+
+/* Responsive header */
+
+@media (max-width: 680px) {
+    .dashboard-header {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+}
+
+/* Header right section */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.logout-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+}
+
+.logout-button:hover {
+    background-color: #e5e5e5;
+}
+
+.logout-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }

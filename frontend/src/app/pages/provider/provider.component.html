@@ -28,16 +28,33 @@
       Provider Dashboard
     </h1>
 
-    <div *ngIf="providerName" class="dashboard-user-name" style="
+    <div style="
         display: flex;
         align-items: center;
-        gap: 10px;
-        font-size: 18px;
-        font-weight: 600;
-        color: #1f2937;
-      ">
-      {{ providerName }}
+        gap: 24px;
+    ">
+      <button type="button" (click)="logout()" style="
+            padding: 10px 18px;
+            background-color: white;
+            color: black;
+            border: 2px solid black;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        ">
+        Logout
+      </button>
+
+      <div *ngIf="providerName" class="dashboard-user-name" style="
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        ">
+        {{ providerName }}
+      </div>
     </div>
+
   </header>
 </div>
 

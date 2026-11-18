@@ -2,6 +2,7 @@
 import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 
 interface Appointment {
     _id: string;
@@ -25,12 +26,14 @@ interface Appointment {
 @Component({
     selector: 'app-admin-view-app',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, RouterLink],
     templateUrl: './admin-view-app.component.html',
     styleUrl: './adminViewApp.css'
 })
 export class AdminViewAppComponent implements OnInit {
     private cdr = inject(ChangeDetectorRef);
+    private router = inject(Router);
+    adminName = '';
     appointments: Appointment[] = [];
     loading = true;
     errorMessage = '';
@@ -39,8 +42,38 @@ export class AdminViewAppComponent implements OnInit {
     selectedDate = '';
     cancellingId: string | null = null;
 
-    async ngOnInit() {
-        await this.loadAppointments();
+    async ngOnInit(): Promise<void> {
+        await Promise.all([
+            this.loadAdminName(),
+            this.loadAppointments()
+        ]);
+    }
+
+    async loadAdminName(): Promise<void> {
+        try {
+            const response = await fetch('/api/auth/user', {
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error('Unable to retrieve admin information.');
+            }
+
+            const user = await response.json();
+
+            const firstName = user.firstN || '';
+            const lastName = user.lastN || '';
+
+            this.adminName =
+                `${firstName} ${lastName}`.trim() ||
+                user.username ||
+                '';
+
+        } catch (error) {
+            console.error('Error loading admin name:', error);
+        } finally {
+            this.cdr.detectChanges();
+        }
     }
 
     async loadAppointments() {
@@ -222,6 +255,25 @@ export class AdminViewAppComponent implements OnInit {
         const thirtyMinutes = 30 * 60 * 1000;
 
         return startTime - Date.now() > thirtyMinutes;
+    }
+
+    async logout(): Promise<void> {
+        try {
+            const response = await fetch('/api/auth/logout', {
+                method: 'POST',
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error('Logout failed.');
+            }
+
+            await this.router.navigate(['/login']);
+
+        } catch (error) {
+            console.error('Error logging out:', error);
+            window.alert('Unable to log out. Please try again.');
+        }
     }
 
 }

@@ -406,11 +406,6 @@ router.post(
       appointment.status = 'cancelled';
       await appointment.save();
 
-      console.log('Admin cancellation notification debug:', {
-        appointmentId: appointment._id,
-        customerId: booker,
-        providerId: provider
-      });
       // Notify the customer if the slot was booked
       if (booker) {
         await createNotification({

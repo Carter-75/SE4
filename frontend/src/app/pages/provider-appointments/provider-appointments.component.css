@@ -1,0 +1,16 @@
+/* Provider Appointments Page */
+
+:host {
+    display: block;
+    min-height: 100vh;
+    background-color: rgba(109, 205, 124, 1);
+}
+
+.appointments-page {
+    background-color: rgba(109, 205, 124, 1);
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    margin: 0;
+    box-sizing: border-box;
+}

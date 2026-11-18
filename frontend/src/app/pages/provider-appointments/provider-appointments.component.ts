@@ -33,7 +33,9 @@ interface AppointmentCard {
   standalone: true,
   imports: [CommonModule, BackButtonComponent],
   templateUrl: './provider-appointments.component.html',
+  styleUrl: './provider-appointments.component.css',
 })
+
 export class ProviderAppointmentsPageComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 

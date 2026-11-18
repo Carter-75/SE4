@@ -1,3 +1,30 @@
+<!-- Admin Appointment Hub Header -->
+<div class="dashboard-header-wrapper">
+    <header class="dashboard-header">
+
+        <h1>Admin Appointment Hub</h1>
+
+
+        <div class="header-right">
+
+            <a routerLink="/admin" class="back-button" aria-label="Back to Admin Dashboard">
+                ← Back
+            </a>
+
+            <button type="button" class="logout-button" (click)="logout()">
+                Logout
+            </button>
+
+            <div *ngIf="adminName" class="dashboard-user-name">
+                {{ adminName }}
+            </div>
+
+        </div>
+
+
+    </header>
+</div>
+
 <main class="appointments-page">
 
     <!-- Search by customer or provider -->

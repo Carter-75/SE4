@@ -53,4 +53,24 @@ export class ProviderPageComponent implements OnInit {
       this.cdr.detectChanges();
     }
   }
+
+  async logout(): Promise<void> {
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        throw new Error('Logout failed.');
+      }
+
+      await this.router.navigate(['/login']);
+
+    } catch (error) {
+      console.error('Error logging out:', error);
+      window.alert('Unable to log out. Please try again.');
+    }
+  }
+
 }

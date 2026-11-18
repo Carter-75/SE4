@@ -1,7 +1,7 @@
 
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class CustomerPageComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
-
+  private router = inject(Router);
   customerName = '';
 
   constructor() {
@@ -45,4 +45,24 @@ export class CustomerPageComponent implements OnInit {
       this.cdr.detectChanges();
     }
   }
+
+  async logout(): Promise<void> {
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        throw new Error('Logout failed.');
+      }
+
+      await this.router.navigate(['/login']);
+
+    } catch (error) {
+      console.error('Error logging out:', error);
+      window.alert('Unable to log out. Please try again.');
+    }
+  }
+
 }

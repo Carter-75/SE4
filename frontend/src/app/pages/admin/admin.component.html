@@ -1,3 +1,24 @@
+<!-- Admin Dashboard Header -->
+<div class="dashboard-header-wrapper">
+    <header class="dashboard-header">
+
+        <h1>Admin Dashboard</h1>
+
+        <div class="header-right">
+
+            <button type="button" class="logout-button" (click)="logout()">
+                Logout
+            </button>
+
+            <div *ngIf="adminName" class="dashboard-user-name">
+                {{ adminName }}
+            </div>
+
+        </div>
+
+    </header>
+</div>
+
 <main class="dashboard">
 
     <!-- User Control -->
