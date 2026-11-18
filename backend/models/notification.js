@@ -28,15 +28,19 @@ const notificationSchema = new mongoose.Schema({
     default: 'booked',
     required: true
   },
-  message: {
+  message: { // Message in the notification
     type: String,
     default: ''
   },
-  read: {
+  read: { // Indicates if a notification was read by the user
     type: Boolean,
     default: false,
     required: true
-  }
+  },
+  isDisplayed: { // Indicates if a notification is displayed to a user
+    type: Boolean,
+    default: true,
+    required: true
 });
 
 module.exports = mongoose.model('Notification', notificationSchema, 'notification');
