@@ -8,6 +8,9 @@ import { ProviderPageComponent } from './pages/provider/provider.component';
 import { SettingsPageComponent } from './pages/settings/settings.component';
 import { AppointmentsPageComponent } from './pages/appointments/appointments.component';
 import { ProviderAppointmentsPageComponent } from './pages/provider-appointments/provider-appointments.component';
+import { AdminPageComponent } from './pages/admin/admin.component';
+import { adminGuard } from './guards/admin.guard';
+import { AdminViewAppComponent } from './pages/adminViewApp/admin-view-app.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -20,5 +23,11 @@ export const routes: Routes = [
   { path: 'settings', component: SettingsPageComponent },
   { path: 'appointments', component: AppointmentsPageComponent },
   { path: 'provider-appointments', component: ProviderAppointmentsPageComponent },
+  {
+    path: 'admin', component: AdminPageComponent, canActivate: [adminGuard]
+  },
+  {
+    path: 'admin/appointments', component: AdminViewAppComponent, canActivate: [adminGuard]
+  },
   { path: '**', redirectTo: 'login' },
 ];

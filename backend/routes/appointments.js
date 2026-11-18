@@ -25,6 +25,15 @@ function requireProvider(req, res, next) {
   next();
 }
 
+function requireAdmin(req, res, next) {
+  if (req.user.type !== 'admin') {
+    return res.status(403).json({
+      message: 'Only administrators can access this resource.'
+    });
+  }
+  next();
+}
+
 function requireBooker(req, res, next) {
   if (req.user.type !== 'customer' && req.user.type !== 'provider') {
     return res.status(403).json({
@@ -35,7 +44,18 @@ function requireBooker(req, res, next) {
   next();
 }
 function createNotification(data) {
-  return Notification.create(data).catch(() => null);
+  return Notification.create(data).catch(error => {
+    console.error('Failed to create notification:', error.message);
+
+    if (error.errInfo?.details) {
+      console.error(
+        'MongoDB validation details:',
+        JSON.stringify(error.errInfo.details, null, 2)
+      );
+    }
+
+    return null;
+  });
 }
 
 function formatAppointmentTime(date) {
@@ -178,6 +198,19 @@ router.post(
     }
   }
 );
+//Get all appointments (administrators only)
+router.get('/admin/all', requireLogin, requireAdmin, async (req, res, next) => {
+  try {
+    const appointment = await Appointment.find({})
+      .populate('provider', 'firstN lastN username serviceType')
+      .populate('user', 'firstN lastN username')
+      .sort({ startTime: 1 });
+
+    res.json(appointment);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // Use in View Appointments code
 router.get('/mine', requireLogin, async (req, res, next) => {
@@ -337,6 +370,76 @@ router.post('/:id/unbook', requireLogin, async (req, res, next) => {
     next(error);
   }
 });
+
+
+// Cancel any appointment (administrators only)
+router.post(
+  '/admin/:id/cancel',
+  requireLogin,
+  requireAdmin,
+  async (req, res, next) => {
+    try {
+      const appointment = await Appointment.findOne({
+        _id: req.params.id,
+        status: { $ne: 'cancelled' }
+      });
+
+      if (!appointment) {
+        return res.status(404).json({
+          message: 'Appointment not found or already cancelled.'
+        });
+      }
+
+      // Keep the existing 30-minute cancellation restriction
+      if (
+        appointment.startTime.getTime() - Date.now()
+        <= 30 * 60 * 1000
+      ) {
+        return res.status(400).json({
+          message: 'Appointments cannot be changed within 30 minutes of the start time.'
+        });
+      }
+
+      const booker = appointment.user;
+      const provider = appointment.provider;
+
+      appointment.status = 'cancelled';
+      await appointment.save();
+
+      console.log('Admin cancellation notification debug:', {
+        appointmentId: appointment._id,
+        customerId: booker,
+        providerId: provider
+      });
+      // Notify the customer if the slot was booked
+      if (booker) {
+        await createNotification({
+          user: booker,
+          appointment: appointment._id,
+          kind: 'cancelled',
+          message: `"${appointment.title}" on ${formatAppointmentTime(appointment.startTime)} was cancelled by an administrator.`
+        });
+      }
+
+      // Notify the provider
+      if (provider) {
+        await createNotification({
+          provider,
+          appointment: appointment._id,
+          kind: 'cancelled',
+          message: `"${appointment.title}" on ${formatAppointmentTime(appointment.startTime)} was cancelled by an administrator.`
+        });
+      }
+
+      res.json({
+        message: 'Appointment cancelled successfully.',
+        appointment
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 // Cancel button: use in View Appointments code
 router.post('/:id/cancel', requireLogin, async (req, res, next) => {

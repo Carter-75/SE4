@@ -1,0 +1,101 @@
+<main class="appointments-page">
+
+    <!-- Search by customer or provider -->
+    <div class="search-container">
+        <input type="search" id="appointmentSearch" placeholder="Search by name or provider..."
+            aria-label="Search by customer or provider" [(ngModel)]="searchTerm">
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+
+        <!-- Date filter -->
+        <div class="filter-group">
+            <div class="filter-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="5" width="18" height="16" rx="2" />
+                    <path d="M7 2v6M17 2v6M3 10h18" />
+                </svg>
+            </div>
+
+            <input type="date" id="dateFilter" aria-label="Filter by date" [(ngModel)]="selectedDate">
+            <button type="button" *ngIf="selectedDate" (click)="selectedDate = ''"> Clear Date </button>
+        </div>
+
+        <!-- Service filter -->
+        <div class="filter-group">
+            <div class="filter-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 7h16M4 12h16M4 17h16" />
+                </svg>
+            </div>
+
+            <select id="serviceFilter" aria-label="Filter by service" [(ngModel)]="selectedService">
+                <option value="all">All Services</option>
+                <option value="beauty">Beauty</option>
+                <option value="fitness">Fitness</option>
+                <option value="medical">Medical</option>
+            </select>
+        </div>
+
+    </div>
+
+    <!-- Appointments -->
+
+    <div class="appointments-grid" id="appointmentsGrid">
+
+        <div *ngIf="loading" class="empty-state">
+            <p>Loading appointments...</p>
+        </div>
+
+        <div *ngIf="errorMessage" class="empty-state">
+            <p>{{ errorMessage }}</p>
+        </div>
+
+        <div *ngIf="!loading && !errorMessage && filteredAppointments.length === 0" class="empty-state">
+            <h2>No matching appointments to display</h2>
+            <p>Try searching for a different customer or provider.</p>
+        </div>
+
+        <div class="appointment" *ngFor="let appointment of filteredAppointments">
+            <div class="profile-circle">
+                <span>👤</span>
+            </div>
+
+            <div class="appointment-info">
+                <div class="appointment-details">
+                    <strong>{{ getCustomerName(appointment) }}</strong>
+
+                    <span>
+                        Provider: {{ getProviderName(appointment) }}
+                    </span>
+
+                    <span>
+                        {{ appointment.title }} |
+                        {{ appointment.category }}
+                    </span>
+
+                    <span>
+                        {{ formatDate(appointment.startTime) }} |
+                        {{ formatTime(appointment.startTime) }}
+                        -
+                        {{ formatTime(appointment.endTime) }}
+                    </span>
+
+                    <span>
+                        Status: {{ appointment.status }}
+                    </span>
+                </div>
+                <button *ngIf="appointment.status !== 'cancelled'" type="button" class="cancel-button"
+                    [disabled]="!canCancelAppointment(appointment) || cancellingId !== null"
+                    [title]="!canCancelAppointment(appointment) ? 'Cannot cancel appointments within 30 minutes of their start time.' : 'Cancel this appointment' "
+                    (click)="cancelAppointment(appointment)">
+                    {{ cancellingId === appointment._id ? 'Cancelling...' : 'Cancel' }}
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+
+</main>

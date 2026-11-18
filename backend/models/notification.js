@@ -5,12 +5,12 @@ const notificationSchema = new mongoose.Schema({
   user: { // Customer the notification is sent to
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', // Reference to the User model
-    default: null
+
   },
   provider: { // Service provider the notification is sent to
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', // Reference to the User model
-    default: null
+
   },
   appointment: { // Appointment the notification is associated with
     type: mongoose.Schema.Types.ObjectId,

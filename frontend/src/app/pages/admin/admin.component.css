@@ -1,0 +1,107 @@
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #ffb65c;
+    }
+
+    .dashboard {
+        width: 100%;
+        max-width: 1440px;
+        min-height: 1024px;
+        margin: auto;
+        position: relative;
+        background-color: #ffb65c;
+    }
+
+    .dashboard-button {
+        position: absolute;
+        width: 302px;
+        border: none;
+        padding: 0;
+        background: transparent;
+        cursor: pointer;
+        text-align: center;
+        font-family: inherit;
+        font-size: 30px;
+        color: black;
+    }
+
+    .icon-circle {
+        width: 302px;
+        height: 302px;
+        border-radius: 50%;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.2s ease;
+    }
+
+    .icon-circle svg {
+        width: 140px;
+        height: 140px;
+        stroke: #222;
+        stroke-width: 1.5;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .dashboard-button:hover .icon-circle {
+        transform: scale(1.05);
+    }
+
+    .dashboard-button:active .icon-circle {
+        transform: scale(0.97);
+    }
+
+    .dashboard-button span {
+        display: block;
+        margin-top: 18px;
+        white-space: nowrap;
+    }
+
+    .user-control {
+        top: 105px;
+        left: 103px;
+    }
+
+    .account-settings {
+        top: 541px;
+        left: 103px;
+    }
+
+    .appointment-hub {
+        top: 105px;
+        left: 566px;
+    }
+
+    .appointment-statistics {
+        top: 105px;
+        left: 1028px;
+    }
+
+    @media (max-width: 1100px) {
+        .dashboard {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 60px 30px;
+            padding: 60px 30px;
+            justify-items: center;
+        }
+
+        .dashboard-button {
+            position: static;
+        }
+    }
+
+    @media (max-width: 680px) {
+        .dashboard {
+            grid-template-columns: 1fr;
+        }
+    }

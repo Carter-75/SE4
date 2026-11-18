@@ -65,14 +65,13 @@ export class LoginPageComponent {
       } else if (result.type === 'provider') {
         await this.router.navigate(['/provider']);
       } else if (result.type === 'admin') {
-        this.statusMessage =
-          'Login successful, but the admin page has not been created yet.';
+        await this.router.navigate(['/admin']);
       } else {
         this.statusMessage =
           'Login successful, but this account type is not recognized.';
       }
 
-     } catch (error: unknown) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
 
       this.statusMessage =
@@ -80,14 +79,14 @@ export class LoginPageComponent {
           ? error.message
           : 'Unable to connect to the server. Please try again.';
 
-    //console.log('Status message set to:', this.statusMessage);
-  } finally {
-  this.isLoading = false;
+      //console.log('Status message set to:', this.statusMessage);
+    } finally {
+      this.isLoading = false;
 
-  // Explicitly refresh the Angular view.
-  this.cdr.detectChanges();
+      // Explicitly refresh the Angular view.
+      this.cdr.detectChanges();
 
-  //console.log('Login finished; isLoading:', this.isLoading);
-}
+      //console.log('Login finished; isLoading:', this.isLoading);
+    }
   }
 }
