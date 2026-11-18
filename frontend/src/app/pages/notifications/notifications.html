@@ -11,32 +11,48 @@
 <body>
   <div class="page">
 
-    <!-- All notifications -->
-    <main class="notifications">
+    <!-- Notifications -->
+    <main class="notifications" aria-labelledby="notificationsHeading">
+      <h1 id="notificationsHeading">Notifications</h1>
+      <hr class="section-line">
 
-      <section aria-labelledby="notificationsHeading">
-        <h1 id="notificationsHeading">Notifications</h1>
-        <hr class="section-line">
+      <!-- Search bar -->
+      <search class="searchbar">
+          <input
+              type="search"
+              class="search"
+              id="searchInput"
+              placeholder="Search notifications... (this function is not implemented yet)"
+              aria-label="Search notifications"
+          >
+      </search>
 
-        <!-- Search bar -->
-        <search class="searchbar">
-            <input
-                type="search"
-                class="search"
-                id="searchInput"
-                placeholder="Search notifications... (this function is not implemented yet)"
-                aria-label="Search notifications"
-            >
-        </search>
-
-        <!-- List of notifications, most recent notification at the top -->
-        <ul class="notification-list" id="notificationsList"></ul>
-      </section>
+      <!-- List of notifications -->
+      <div class="notification-list" id="notificationsList">
+        <!-- static example notification, should be deleted, simply shows the general template -->
+        <article class="notification-card">
+          <div class="notification-info">
+            <div class="notification-header">
+              <h3>Appointment Cancelled</h3>
+              <p>11/19/2026 1:08 PM</p>
+            </div>
+            <p>Appt Type - Title - (either) previously booked with Provider Name (or) previously booked by Customer Name</p>
+            <p>12/13/2026 from 3:00 - 4:00 PM</p>
+          </div>
+          <button type="button" class="delete-btn">Delete</button>
+        </article>
+      </div>
     </main>   
   </div>
 
   <script>
-    /*
+    /* Notes on functionalities:
+    - Search bar is negotiable, we can discuss if we want this and if we do, what we should search by (date, provider/customer, etc.)
+    - When the system creates an appointment, a new article should be placed in the "notification-list" div
+        in the format of the static example shown above
+    - More recent notifications should be shown at the top of the list
+    - The delete button will set the notification's "isDisplayed" attribute from true to false in the database
+    - false "isDisplayed" notifications do not appear in the notifications list
     
     // Backend endpoints
     const API_URL = "/api/appointments";

@@ -61,56 +61,43 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin-bottom: 95px;
 }
 
 .notification-card {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 24px;
-  padding: 20px;
-  width: 100%;
-  max-width: 700px;
-  background: #f0f0f0;
-  border: 1px solid #d0d0d0;
-  border-radius: 8px;
-}
-/*
-
-.appointment-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 72px;
-  height: 72px;
-  flex-shrink: 0;
+  gap: 16px;
   background: #d9d9d9;
-  border-radius: 50%;
-  font-size: 30px;
+  padding: 20px;
+  margin: 16px 0;
 }
 
-.appointment-info {
+.notification-info {
   flex: 1;
   min-width: 0;
 }
 
-.appointment-info h2 {
+.notification-info h3 {
   font-size: 22px;
   font-weight: 600;
   margin: 0 0 8px;
 }
 
-.appointment-info p {
+.notification-info p {
   font-size: 16px;
-  margin: 5px 0;
+  margin: 10px 0;
 }
 
-.appointment-category {
-  color: #555;
-  font-size: 14px;
+.notification-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
 }
 
-.cancel-btn {
+/* Delete button */
+
+.delete-btn {
   padding: 10px 15px;
   background: white;
   border: 1px solid #777;
@@ -119,14 +106,16 @@ body {
   font-size: 15px;
 }
 
-.cancel-btn:hover {
+.delete-btn:hover {
   background: #e5e5e5;
 }
 
-.cancel-btn:disabled {
+.delete-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Other messages */
 
 .empty-message {
   color: #666;
@@ -137,176 +126,24 @@ body {
   color: #a00000;
 }
 
-/* Search bar */
-/*
-.sidebar {
-  background: #d9d9d9;
-  padding: 90px 38px;
-}
-
-.search {
-  width: 100%;
-  padding: 10px 15px;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid black;
-  font-size: 24px;
-  font-family: inherit;
-  outline-offset: 4px;
-}
-
-.search::placeholder {
-  color: #555;
-}
-
-.controls {
-  display: flex;
-  gap: 25px;
-  margin-top: 25px;
-}
-
-.control {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.control select {
-  font-size: 20px;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-.control-icon {
-  width: 42px;
-  height: 41px;
-  background: #969494;
-}
-*/
-/* Category radio buttons */
-/*
-.category-heading {
-  font-size: 22px;
-  font-weight: 500;
-  margin: 65px 0 25px;
-}
-
-.categories {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-.category-option {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  font-size: 30px;
-  cursor: pointer;
-}
-
-.category-option input[type="radio"] {
-  appearance: none;
-  width: 40px;
-  height: 40px;
-  border: 3px solid #666;
-  background: white;
-  border-radius: 50%;
-  cursor: pointer;
-  flex-shrink: 0;
-  position: relative;
-}
-
-.category-option input[type="radio"]:checked {
-  border-color: #333;
-}
-
-.category-option input[type="radio"]:checked::after {
-  content: "";
-  position: absolute;
-  inset: 8px;
-  border-radius: 50%;
-  background: #333;
-}
-
-.category-option input[type="radio"]:focus-visible {
-  outline: 3px solid #333;
-  outline-offset: 4px;
-}
-
-.category-option:has(input:checked) span {
-  font-weight: 600;
-}
-
 /* Tablet layout */
-/*
 @media (max-width: 1100px) {
-  .page {
-    grid-template-columns: minmax(0, 1fr) 350px;
-  }
-
-  .appointments {
+  .notifications {
     padding: 40px 30px;
   }
-
-  .sidebar {
-    padding: 60px 25px;
-  }
-
-  .category-option {
-    font-size: 24px;
-  }
 }
 
-/* Mobile layout: sidebar moves above appointments */
-/*
+/* Mobile layout */
 @media (max-width: 750px) {
-  .page {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    grid-column: 1;
-    grid-row: 1;
+  .notifications {
     padding: 30px 20px;
   }
 
-  .appointments {
-    grid-column: 1;
-    grid-row: 2;
-    padding: 30px 20px;
-  }
-
-  .appointments h1 {
+  .notifications h1 {
     font-size: 52px;
   }
 
-  .category-heading {
-    margin-top: 30px;
-  }
-
-  .categories {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-
-  .category-option {
-    font-size: 18px;
-  }
-
-  .category-option input[type="radio"] {
-    width: 28px;
-    height: 28px;
-  }
-
-  .category-option input[type="radio"]:checked::after {
-    inset: 5px;
-  }
-
-  .appointment-card {
+  .notification-card {
     flex-wrap: wrap;
   }
 }
