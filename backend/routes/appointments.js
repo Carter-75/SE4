@@ -312,6 +312,12 @@ router.post('/:id/unbook', requireLogin, async (req, res, next) => {
       });
     }
 
+    if (appointment.startTime.getTime() - Date.now() <= 30 * 60 * 1000) {
+      return res.status(400).json({
+        message: 'Appointments cannot be changed within 30 minutes of the start time.'
+      });
+    }
+
     appointment.user = null;
     appointment.status = 'active';
     await appointment.save();
@@ -344,6 +350,12 @@ router.post('/:id/cancel', requireLogin, async (req, res, next) => {
     if (!appointment) {
       return res.status(404).json({
         message: 'Appointment not found.'
+      });
+    }
+
+    if (appointment.startTime.getTime() - Date.now() <= 30 * 60 * 1000) {
+      return res.status(400).json({
+        message: 'Appointments cannot be changed within 30 minutes of the start time.'
       });
     }
 
