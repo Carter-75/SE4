@@ -2,7 +2,9 @@
   <app-back-button fallback="/provider"></app-back-button>
 
   <h1>View Your Appointments</h1>
-
+  <p id="appointments-status" class="error-message" role="alert" *ngIf="statusMessage">
+    {{ statusMessage }}
+  </p>
   <div class="appointments-layout">
     <div class="appointments-main">
       <section aria-labelledby="upcomingHeading">
@@ -21,8 +23,15 @@
               <p>{{ appointment.customerName }}</p>
               <p>{{ appointment.dateLabel }}</p>
               <p class="appointment-category">{{ appointment.categoryLabel }}</p>
+              <p *ngIf="appointment.status === 'cancelled'" class="cancelled-label"
+                style="color: #b91c1c; font-weight: 700;">
+                CANCELLED
+              </p>
             </div>
-            <button class="cancel-btn" type="button" (click)="cancel(appointment)">Cancel</button>
+            <button *ngIf="appointment.status !== 'cancelled'" class="cancel-btn" type="button"
+              (click)="cancel(appointment)">
+              Cancel
+            </button>
           </article>
         </ng-container>
       </section>
@@ -43,23 +52,19 @@
               <p>{{ appointment.customerName }}</p>
               <p>{{ appointment.dateLabel }}</p>
               <p class="appointment-category">{{ appointment.categoryLabel }}</p>
+              <p *ngIf="appointment.status === 'cancelled'" class="cancelled-label">
+                CANCELLED
+              </p>
             </div>
           </article>
         </ng-container>
       </section>
 
-      <p id="appointments-status" role="status" *ngIf="statusMessage">{{ statusMessage }}</p>
     </div>
 
     <aside class="appointments-sidebar">
-      <input
-        type="search"
-        class="search"
-        placeholder="Search appointments..."
-        aria-label="Search appointments"
-        [value]="searchText"
-        (input)="onSearch($event)"
-      >
+      <input type="search" class="search" placeholder="Search appointments..." aria-label="Search appointments"
+        [value]="searchText" (input)="onSearch($event)">
 
       <select aria-label="Sort appointments" [value]="sortOption" (change)="onSort($event)">
         <option value="default">Sort</option>
@@ -78,17 +83,20 @@
         </label>
 
         <label class="category-option">
-          <input type="radio" name="category" value="beauty" [checked]="category === 'beauty'" (change)="onCategory('beauty')">
+          <input type="radio" name="category" value="beauty" [checked]="category === 'beauty'"
+            (change)="onCategory('beauty')">
           <span>Beauty</span>
         </label>
 
         <label class="category-option">
-          <input type="radio" name="category" value="medical" [checked]="category === 'medical'" (change)="onCategory('medical')">
+          <input type="radio" name="category" value="medical" [checked]="category === 'medical'"
+            (change)="onCategory('medical')">
           <span>Medical</span>
         </label>
 
         <label class="category-option">
-          <input type="radio" name="category" value="fitness" [checked]="category === 'fitness'" (change)="onCategory('fitness')">
+          <input type="radio" name="category" value="fitness" [checked]="category === 'fitness'"
+            (change)="onCategory('fitness')">
           <span>Fitness</span>
         </label>
       </div>

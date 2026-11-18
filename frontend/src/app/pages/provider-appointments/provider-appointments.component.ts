@@ -25,6 +25,7 @@ interface AppointmentCard {
   categoryLabel: string;
   dateLabel: string;
   timestamp: number;
+  status: string;
 }
 
 @Component({
@@ -78,14 +79,15 @@ export class ProviderAppointmentsPageComponent implements OnInit {
 
       const data: MineAppointment[] = await response.json();
 
+
       this.appointments = data
         .filter(
           (appointment) =>
             appointment.provider &&
-            appointment.provider._id === me.id &&
-            appointment.status !== 'cancelled'
+            appointment.provider._id === me.id
         )
         .map((appointment) => this.toCard(appointment));
+
     } catch (error) {
       console.error(error);
       this.appointments = [];
@@ -101,8 +103,8 @@ export class ProviderAppointmentsPageComponent implements OnInit {
     const customer = appointment.user;
     const customerName = customer
       ? [customer.firstN, customer.lastN].filter(Boolean).join(' ') ||
-        customer.username ||
-        'Customer'
+      customer.username ||
+      'Customer'
       : appointment.status
         ? appointment.status[0].toUpperCase() + appointment.status.slice(1)
         : '';
@@ -131,6 +133,7 @@ export class ProviderAppointmentsPageComponent implements OnInit {
         : '',
       dateLabel,
       timestamp: start.getTime(),
+      status: appointment.status,
     };
   }
 
@@ -230,18 +233,28 @@ export class ProviderAppointmentsPageComponent implements OnInit {
 
       if (!response.ok) {
         const data = await response.json().catch(() => null);
+
         this.statusMessage =
           data?.message || 'Unable to cancel the appointment. Please try again.';
+
         this.cdr.detectChanges();
+
+        // Display the error in a popup
+        window.alert(this.statusMessage);
+
         return;
       }
 
       await this.loadAppointments();
     } catch (error) {
       console.error(error);
+
       this.statusMessage =
         'Unable to cancel the appointment. Please try again.';
+
       this.cdr.detectChanges();
+
+      window.alert(this.statusMessage);
     }
   }
 }
