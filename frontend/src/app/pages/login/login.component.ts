@@ -20,6 +20,7 @@ export class LoginPageComponent {
     inject(Title).setTitle('Login');
   }
 
+
   async login(event: SubmitEvent): Promise<void> {
     event.preventDefault();
 
@@ -34,41 +35,69 @@ export class LoginPageComponent {
       return;
     }
 
+    if (this.isLoading) {
+      return;
+    }
+
     this.isLoading = true;
     this.statusMessage = 'Logging in...';
-    //('Login started');
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
-      //console.log('Login response received:', response.status);
+      let forceLogin = false;
 
-      const result = await response.json().catch(() => ({}));
+      while (true) {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            username,
+            password,
+            forceLogin
+          })
+        });
 
-      if (!response.ok) {
-        throw new Error(
-          result.message || 'Invalid username or password. Please try again.'
-        );
-      }
+        const result = await response.json().catch(() => ({}));
 
-      if (result.type === 'customer') {
-        await this.router.navigate(['/customer']);
-      } else if (result.type === 'provider') {
-        await this.router.navigate(['/provider']);
-      } else if (result.type === 'admin') {
-        await this.router.navigate(['/admin']);
-      } else {
-        this.statusMessage =
-          'Login successful, but this account type is not recognized.';
+        if (
+          response.status === 409 &&
+          result.code === 'SESSION_EXISTS'
+        ) {
+          const confirmed = window.confirm(
+            'This account is already logged in on another device.\n\n' +
+            'Would you like to sign out of the other device and log in here?'
+          );
+
+          if (!confirmed) {
+            this.statusMessage = 'Login cancelled.';
+            return;
+          }
+
+          forceLogin = true;
+          continue;
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            result.message ||
+            'Invalid username or password. Please try again.'
+          );
+        }
+
+        if (result.type === 'customer') {
+          await this.router.navigate(['/customer']);
+        } else if (result.type === 'provider') {
+          await this.router.navigate(['/provider']);
+        } else if (result.type === 'admin') {
+          await this.router.navigate(['/admin']);
+        } else {
+          this.statusMessage =
+            'Login successful, but this account type is not recognized.';
+        }
+
+        break;
       }
 
     } catch (error: unknown) {
@@ -79,14 +108,10 @@ export class LoginPageComponent {
           ? error.message
           : 'Unable to connect to the server. Please try again.';
 
-      //console.log('Status message set to:', this.statusMessage);
     } finally {
       this.isLoading = false;
-
-      // Explicitly refresh the Angular view.
       this.cdr.detectChanges();
-
-      //console.log('Login finished; isLoading:', this.isLoading);
     }
   }
+
 }

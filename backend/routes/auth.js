@@ -166,6 +166,7 @@ router.post('/register', async (req, res) => {
 });
 
 // --- Local Login ---
+
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', async (err, user, info) => {
     if (err) return next(err);
@@ -177,30 +178,40 @@ router.post('/login', (req, res, next) => {
     }
 
     try {
-      const existingSession = await mongoose.connection
-        .collection('sessions')
-        .findOne({
-          _id: { $ne: req.sessionID },
-          expires: { $gt: new Date() },
-          session: { $regex: `"user":"${user.id}"` }
-        });
+      const sessions = mongoose.connection.collection('sessions');
+
+      const sessionFilter = {
+        _id: { $ne: req.sessionID },
+        expires: { $gt: new Date() },
+        session: { $regex: `"user":"${user.id}"` }
+      };
+
+      const existingSession = await sessions.findOne(sessionFilter);
 
       if (existingSession) {
-        return res.status(401).json({
-          message: 'This account is already logged in.'
-        });
+        if (req.body.forceLogin !== true) {
+          return res.status(409).json({
+            code: 'SESSION_EXISTS',
+            message: 'This account is already logged in on another device.'
+          });
+        }
+
+        // User confirmed that existing sessions should be ended.
+        await sessions.deleteMany(sessionFilter);
       }
+
+      req.login(user, (loginError) => {
+        if (loginError) return next(loginError);
+
+        return res.json(publicUser(user));
+      });
+
     } catch (sessionError) {
       return next(sessionError);
     }
-
-    req.login(user, (err) => {
-      if (err) return next(err);
-
-      return res.json(publicUser(user));
-    });
   })(req, res, next);
 });
+
 
 // --- Current Session ---
 router.get('/user', (req, res) => {
