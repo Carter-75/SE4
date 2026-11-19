@@ -1,0 +1,28 @@
+<main class="notifications-page">
+  <app-back-button fallback="/settings"></app-back-button>
+  <div class="notifications">
+    <h1 id="notificationsHeading">Notifications</h1>
+    <hr class="section-line">
+    <div class="searchbar">
+      <input
+        type="search"
+        class="search"
+        placeholder="Search notifications... (this function is not implemented yet)"
+        aria-label="Search notifications"
+      >
+    </div>
+    <button type="button" *ngIf="hasUnread" (click)="markAllRead()">Mark all read</button>
+    <p *ngIf="notifications.length === 0">No notifications.</p>
+    <div class="notification-list">
+      <article class="notification-card" *ngFor="let notification of notifications" [class.unread]="!notification.read" (click)="markRead(notification)">
+        <div class="notification-info">
+          <div class="notification-header">
+            <h3>{{ kindTitle(notification.kind) }}</h3>
+            <p>{{ formatSent(notification.timeSent) }}</p>
+          </div>
+          <p>{{ notification.message }}</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</main>

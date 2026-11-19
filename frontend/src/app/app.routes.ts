@@ -13,6 +13,7 @@ import { adminGuard } from './guards/admin.guard';
 import { customerGuard } from './guards/customer.guard';
 import { providerGuard } from './guards/provider.guard';
 import { AdminViewAppComponent } from './pages/adminViewApp/admin-view-app.component';
+import { NotificationsPageComponent } from './pages/notifications/notifications.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -23,6 +24,7 @@ export const routes: Routes = [
   { path: 'customer', component: CustomerPageComponent, canActivate: [customerGuard] },
   { path: 'provider', component: ProviderPageComponent, canActivate: [providerGuard] },
   { path: 'settings', component: SettingsPageComponent },
+  { path: 'notifications', component: NotificationsPageComponent },
   { path: 'appointments', component: AppointmentsPageComponent },
   { path: 'provider-appointments', component: ProviderAppointmentsPageComponent },
   { path: 'admin', component: AdminPageComponent, canActivate: [adminGuard] },

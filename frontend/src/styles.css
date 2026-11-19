@@ -1167,30 +1167,6 @@ body {
   cursor: pointer;
 }
 
-.settings-page .notifications {
-  flex-basis: 100%;
-}
-
-.settings-page .notifications-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.settings-page .notifications-list li {
-  padding: 8px 0;
-  cursor: pointer;
-}
-
-.settings-page .notifications-list li.unread {
-  font-weight: bold;
-}
-
-.settings-page .notification-time {
-  display: block;
-  font-size: 0.85em;
-}
-
 .back-button {
   padding: 12px 20px;
   cursor: pointer;
@@ -1246,4 +1222,123 @@ body {
 .booking-page .provider-search input:focus {
   outline: 2px solid #2563eb;
   outline-offset: 2px;
+}
+
+.notifications-page {
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: white;
+  padding: 24px;
+  font-family: Inter, serif;
+  color: black;
+}
+
+.notifications-page .notifications {
+  min-width: 0;
+  padding: 46px 50px;
+}
+
+.notifications-page .notifications h1 {
+  font-size: clamp(48px, 6.5vw, 96px);
+  font-weight: 400;
+  margin: 0;
+}
+
+.notifications-page .section-line {
+  width: 485px;
+  max-width: 100%;
+  border: 0;
+  border-top: 2px solid black;
+  margin: 8px 0 36px 9px;
+}
+
+.notifications-page .searchbar {
+  background: #d9d9d9;
+  padding: 10px;
+  margin-bottom: 24px;
+}
+
+.notifications-page .search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 15px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid black;
+  font-size: 24px;
+  font-family: inherit;
+  outline-offset: 4px;
+}
+
+.notifications-page .search::placeholder {
+  color: #555;
+}
+
+.notifications-page .notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.notifications-page .notification-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background: #d9d9d9;
+  padding: 20px;
+  margin: 16px 0;
+  cursor: pointer;
+}
+
+.notifications-page .notification-card.unread {
+  font-weight: bold;
+}
+
+.notifications-page .notification-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.notifications-page .notification-info h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+.notifications-page .notification-info p {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.notifications-page .notification-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.notifications-page button {
+  padding: 12px 20px;
+  cursor: pointer;
+}
+
+@media (max-width: 1100px) {
+  .notifications-page .notifications {
+    padding: 40px 30px;
+  }
+}
+
+@media (max-width: 750px) {
+  .notifications-page .notifications {
+    padding: 30px 20px;
+  }
+
+  .notifications-page .notifications h1 {
+    font-size: 52px;
+  }
+
+  .notifications-page .notification-card {
+    flex-wrap: wrap;
+  }
 }
