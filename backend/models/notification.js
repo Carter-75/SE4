@@ -22,7 +22,7 @@ const notificationSchema = new mongoose.Schema({
     default: Date.now,
     required: true
   },
-  kind: {
+  kind: { // Type of notification
     type: String,
     enum: ['booked', 'unbooked', 'cancelled', 'reminder'],
     default: 'booked',
@@ -32,15 +32,21 @@ const notificationSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
-  read: { // Indicates if a notification was read by the user
+  readByProvider: { // Indicates if a notification was read by the provider
     type: Boolean,
-    default: false,
-    required: true
+    default: false
   },
-  isDisplayed: { // Indicates if a notification is displayed to the user
+  readByUser: { // Indicates if a notification was read by the user
     type: Boolean,
-    default: true,
-    required: true
+    default: false
+  },
+  isDisplayedToProvider: { // Indicates if a notification is displayed to the provider
+    type: Boolean,
+    default: true
+  },
+  isDisplayedToUser: { // Indicates if a notification is displayed to the user
+    type: Boolean,
+    default: true
   }
 });
 
