@@ -37,12 +37,7 @@ const notificationSchema = new mongoose.Schema({
     default: false,
     required: true
   },
-  isDisplayedToProvider: { // Indicates if a notification is displayed to the service provider
-    type: Boolean,
-    default: true,
-    required: true
-  },
-  isDisplayedToUser: { // Indicates if a notification is displayed to the customer
+  isDisplayed: { // Indicates if a notification is displayed to the user
     type: Boolean,
     default: true,
     required: true
