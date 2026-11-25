@@ -44,11 +44,6 @@ const userSchema = new mongoose.Schema({
     default: true,
     required: true
   },
-  loggedIn: { // Identifies if there is an active login session for the user account
-    type: Boolean,
-    default: false,
-    required: true
-  },
   createdAt: { // Day and time the user account was created
     type: Date,
     default: Date.now
